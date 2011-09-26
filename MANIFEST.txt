@@ -1,0 +1,5 @@
+#!mast .ruby .yardopts bin lib man qed test [A-Z][A-Z]*
+.ruby
+lib/minitest/tapy.rb
+README.rdoc
+COPYING.rdoc

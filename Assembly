@@ -1,0 +1,34 @@
+---
+gem:
+  service: Gem
+  active : true
+
+github:
+  service: github
+  active: true
+
+dnote:
+  service  : DNote
+  labels   : ~
+  output   : log/notes.rdoc
+  active   : true
+
+vclog:
+  service  : VClog
+  output   : log/changelog.rdoc
+  active   : false
+
+email:
+  service : Email
+  file    : ~
+  subject : ~
+  mailto  : ruby-talk@ruby-lang.org
+#  from    : transfire@gmail.com
+#  server  : <%= ENV['EMAIL_SERVER'] %>
+#  port    : <%= ENV['EMAIL_PORT'] %>
+#  account : <%= ENV['EMAIL_ACCOUNT'] %>
+#  domain  : <%= ENV['EMAIL_DOMAIN'] %>
+#  login   : <%= ENV['EMAIL_LOGIN'] %>
+#  secure  : <%= ENV['EMAIL_SECURE'] %>
+  active  : true
+

@@ -1,0 +1,17 @@
+---
+name    : minitest-tapy
+version : 0.1.0
+title   : MiniTest TAP-Y
+source  : ruby.yml
+
+requirements:
+  - detroit (build)
+  - reap    (build)
+
+resources:
+  home: http://rubyworks.github.com/minitest-tapy
+  code: http://github.com/rubyworks/minitest-tapy
+
+copyrights:
+  - 2011 Thomas Sawyer (BSD-2-Clause)
+

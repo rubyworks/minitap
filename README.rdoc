@@ -1,0 +1,43 @@
+= MiniTest TAP-Y/J
+
+{Website}[http://rubyworks.github.com/minitest-tapy]
+{Development}[http://github.com/rubyworks/minitest-tapy]
+
+
+== Description
+
+This project provides a TAP-Y (and in the future a TAP-J) output format for
+the MiniTest test framework --the test framework that comes standard with Ruby
+1.9+.
+
+See {TAPOUT}[http://rubyworks.github.com/tapout] for more information about
+TAP-Y/J format.
+
+
+== Usage
+
+In your test runner add:
+
+  require 'minitest/tapy'
+
+Install `tapout` so that you can do useful things with the TAP-Y output format.
+
+  $ gem install tapout
+
+Then let her rip, e.g.
+
+  $ ruby test/some_test.rb | tapout progressbar
+
+
+== Copying
+
+Copyright (c) 2011 Thomas Sawyer
+
+Made available under the terms of the BSD-2-Clause license.
+
+Portions of this program were drawn from Alexander Kern's
+MiniTest Reporter (c) 2011 Alexander Kern. Thanks Alexander
+for making my endeavor a little bit easier.
+
+See COPYING.rdoc for copyright and licensing details.
+
