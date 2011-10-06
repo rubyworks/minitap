@@ -1,6 +1,6 @@
 = COPYRIGHT NOTICES
 
-== MiniTest TAP-Y/J
+== MiniTap
 
 Copyright:: (c) 2010 Thomas Sawyer, Rubyworks
 License:: BSD-2-Clause

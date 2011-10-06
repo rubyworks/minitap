@@ -1,0 +1,10 @@
+= RELEASE HISTORY
+
+== 0.1.0 / 2011-10-06
+
+This is the first release of MiniTap, a TAP-Y/J reporter
+for the MiniTest test framework.
+
+Changes:
+
+* First Release Day!

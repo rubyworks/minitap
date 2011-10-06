@@ -1,17 +1,25 @@
 ---
-name    : minitest-tapy
+name    : minitap
 version : 0.1.0
-title   : MiniTest TAP-Y
-source  : ruby.yml
+title   : TAP-Y/J for MiniTest 
+summary : MiniTest TAP-Y/J reporter
+description:
+  MiniTap provides a custom MiniTest reporter
+  that outs TAP-Y or TAP-J formatted output.
 
 requirements:
+  - tapout
   - detroit (build)
   - reap    (build)
 
 resources:
-  home: http://rubyworks.github.com/minitest-tapy
-  code: http://github.com/rubyworks/minitest-tapy
+  home: http://rubyworks.github.com/minitap
+  code: http://github.com/rubyworks/minitap
+
+authors:
+  - Thomas Sawyer
 
 copyrights:
   - 2011 Thomas Sawyer (BSD-2-Clause)
 
+source: ruby.yml
