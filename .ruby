@@ -1,6 +1,7 @@
 ---
 authors:
 - name: Thomas Sawyer
+  email: transfire@gmail.com
 copyrights:
 - holder: Thomas Sawyer
   year: '2011'
@@ -26,13 +27,13 @@ load_path:
 - lib
 extra: {}
 name: minitap
-title: TAP-Y/J for MiniTest
+title: MiniTap
 date: '2011-10-06'
 alternatives: []
 version: 0.1.0
 revision: 0
 source:
 - ruby.yml
-summary: MiniTest TAP-Y/J reporter
+summary: TAP-Y/J reporters for MiniTest
 description: MiniTap provides a custom MiniTest reporter that outs TAP-Y or TAP-J
   formatted output.

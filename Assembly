@@ -10,12 +10,12 @@ github:
 dnote:
   service  : DNote
   labels   : ~
-  output   : log/notes.rdoc
+  output   : log/NOTES.rdoc
   active   : true
 
 vclog:
   service  : VClog
-  output   : log/changelog.rdoc
+  output   : log/CHANGELOG.rdoc
   active   : false
 
 email:
