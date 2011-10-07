@@ -1,5 +1,17 @@
 = RELEASE HISTORY
 
+
+== 0.2.0 / 2011-10-07
+
+This release adjusts how the customer reporter classes
+should be used. It's actually a very minor release under 
+the hood.
+
+Changes:
+
+* Adjust usage decumentation.
+
+
 == 0.1.0 / 2011-10-06
 
 This is the first release of MiniTap, a TAP-Y/J reporter
