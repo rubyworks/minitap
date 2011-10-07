@@ -17,10 +17,10 @@ TAP-Y/J formats.
 
 == Usage
 
-MiniTest supports custom reporters by setting `MiniTest::Unit.reporter` to
-an instance of a reporter class. In this case we want to set it to an instance
-of `MiniTest::TapY` or `MiniTest::TapJ`. So in your project's test helper script
-add, e.g.
+MiniTest supports custom report format by setting `MiniTest::Unit.runner` to
+an instance of a custom runner class. In this case we want to set it to an
+instance of `MiniTest::TapY` or `MiniTest::TapJ`. So in your project's test
+helper script add, e.g.
 
   require 'minitap'
   MiniTest::Unit.runner = MiniTest::TapY.new
