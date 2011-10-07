@@ -1,8 +1,6 @@
 #!mast .ruby .yardopts bin lib man qed test [A-Z][A-Z]*
 .ruby
 lib/minitap.rb
-lib/minitest/tapj.rb
-lib/minitest/tapy.rb
 HISTORY.rdoc
 README.rdoc
 COPYING.rdoc

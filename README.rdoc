@@ -1,6 +1,7 @@
 = MiniTap
 
-{Website}[http://rubyworks.github.com/minitap]
+{Website}[http://rubyworks.github.com/minitap] |
+{Documentation}[http://rubydoc.info/gems/minitap/frames] |
 {Development}[http://github.com/rubyworks/minitap]
 
 
@@ -16,20 +17,37 @@ TAP-Y/J formats.
 
 == Usage
 
-Simply require `minitest/tapy` or `minitest/tapj' when running your tests.
-For  example if you use `ruby` on the command line:
+MiniTest supports custom reporters by setting `MiniTest::Unit.reporter` to
+an instance of a reporter class. In this case we want to set it to an instance
+of `MiniTest::TapY` or `MiniTest::TapJ`. So in your project's test helper script
+add, e.g.
 
-  ruby -r'minitest/tapy' test_some_test.rb
+  require 'minitap'
+  MiniTest::Unit.runner = MiniTest::TapY.new
 
-Now to do something intersing with the outout. Make sure `tapout` is installed:
+Now you may want to set this up so it is selectable. In which case use an
+environment variable.
+
+  MiniTest::Unit.runner = \
+    case ENV['rpt']
+    when 'tapy'
+      MiniTest::TapY.new
+    when 'tapj'
+      MiniTest::TapJ.new
+    end
+
+Then you can do, e.g.
+
+  $ rpt=tapy ruby test/some_test.rb
+
+Now to do something interesting with the TAP-Y/J output, you will probably want
+to install `tapout`:
 
   $ gem install tapout
 
-Then pipe the output to the `tapout` command.
+Then pipe the output to the `tapout` command, e.g.
 
-  $ ruby -r'minitest/tapy' test/some_test.rb | tapout progressbar
-
-Adjust your Rake task or other means of running tests to suite.
+  $ rpt=tapy ruby test/some_test.rb | tapout progressbar
 
 
 == Copying
