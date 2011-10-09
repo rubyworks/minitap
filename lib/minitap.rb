@@ -23,7 +23,7 @@ module MiniTest
   class MiniTap < ::MiniTest::Unit
 
     # TAP-Y/J Revision
-    REVISION = 2
+    REVISION = 3
 
     attr_accessor :suite_start_time, :test_start_time, :reporters
     
