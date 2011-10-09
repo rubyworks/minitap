@@ -10,6 +10,7 @@ replacements: []
 conflicts: []
 requirements:
 - name: tapout
+  version: ! '>= 0.3.0'
 - name: detroit
   groups:
   - build
@@ -28,9 +29,9 @@ load_path:
 extra: {}
 name: minitap
 title: MiniTap
-date: '2011-10-07'
+date: '2011-10-09'
 alternatives: []
-version: 0.2.0
+version: 0.3.0
 revision: 0
 source:
 - ruby.yml

@@ -1,6 +1,16 @@
 = RELEASE HISTORY
 
 
+== 0.3.0 / 2011-10-09
+
+Support version 3 of TAP-Y/H spec. This simply entailed renaming
+the `tally` document to `final`.
+
+Changes:
+
+* Support revision 3 of TAP-Y/J.
+
+
 == 0.2.0 / 2011-10-07
 
 This release adjusts how the customer reporter classes

@@ -1,6 +1,6 @@
 ---
 name    : minitap
-version : 0.2.0
+version : 0.3.0
 title   : MiniTap 
 summary : TAP-Y/J reporters for MiniTest
 description:
@@ -8,7 +8,7 @@ description:
   that outs TAP-Y or TAP-J formatted output.
 
 requirements:
-  - tapout
+  - tapout >= 0.3.0
   - detroit (build)
   - reap    (build)
 
