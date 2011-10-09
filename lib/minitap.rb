@@ -162,7 +162,7 @@ module MiniTest
     #
     def tapout_after_suites(suites, type)
       doc = {
-        'type' => 'tally',
+        'type' => 'final',
         'time' => Time.now - self.test_start_time,
         'counts' => {
           'total' => self.test_count,
