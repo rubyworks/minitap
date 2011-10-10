@@ -247,6 +247,7 @@ module MiniTest
         #  'code' => Foo#*
         'exception' => {
           'message'   => clean_message(e.message),
+          'class'     => e.name,
           'file'      => e_file,
           'line'      => e_line,
           #'source'   => '',
@@ -284,6 +285,7 @@ module MiniTest
         #  'code' => Foo#*
         'exception' => {
           'message'   => clean_message(e.message),
+          'class'     => e.name,
           'file'      => e_file,
           'line'      => e_line,
           #'source'    => '',
@@ -321,6 +323,7 @@ module MiniTest
         #  'code' => Foo#*
         'exception' => {
           'message'   => clean_message("#{e.class}: #{e.message}"),
+          'class'     => e.name,
           'file'      => e_file,
           'line'      => e_line,
           #'source'    => '',
@@ -332,7 +335,7 @@ module MiniTest
       return doc
     end
 
-    #
+    # TODO: Use Rubinius exclusion system.
     INTERNALS = /(lib|bin)#{Regexp.escape(File::SEPARATOR)}tapout/
 
     #
