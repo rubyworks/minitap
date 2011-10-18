@@ -1,6 +1,7 @@
 # MiniTest adaptor for tapout.
 
 require 'minitest/unit'
+require 'minitap/ignore_callers'
 require 'stringio'
 
 # Becuase of some wierdness in MiniTest
@@ -25,8 +26,13 @@ module MiniTest
     # TAP-Y/J Revision
     REVISION = 3
 
+    # Backtrace patterns to be omitted.
+    IGNORE_CALLERS = ::RUBY_IGNORE_CALLERS
+
+    #
     attr_accessor :suite_start_time, :test_start_time, :reporters
     
+    # Initialize new MiniTap MiniTest runner.
     def initialize
       self.report = {}
       self.errors = 0
@@ -225,6 +231,7 @@ module MiniTest
     def tapout_skip(suite, test, test_runner)
       e = test_runner.exeception
       e_file, e_line = location(test_runner.exception)
+      r_file = e_file.sub(Dir.pwd+'/', '')
 
       doc = {
         'type'        => 'test',
@@ -247,10 +254,10 @@ module MiniTest
         #  'code' => Foo#*
         'exception' => {
           'message'   => clean_message(e.message),
-          'class'     => e.name,
-          'file'      => e_file,
+          'class'     => e.class.name,
+          'file'      => r_file,
           'line'      => e_line,
-          #'source'   => '',
+          'source'    => source(e_file)[e_line-1].strip,
           'snippet'   => code_snippet(e_file, e_line),
           'backtrace' => filter_backtrace(e.backtrace)
         },
@@ -263,6 +270,7 @@ module MiniTest
     def tapout_failure(suite, test, test_runner)
       e = test_runner.exception
       e_file, e_line = location(test_runner.exception)
+      r_file = e_file.sub(Dir.pwd+'/', '')
 
       doc = {
         'type'        => 'test',
@@ -285,10 +293,10 @@ module MiniTest
         #  'code' => Foo#*
         'exception' => {
           'message'   => clean_message(e.message),
-          'class'     => e.name,
-          'file'      => e_file,
+          'class'     => e.class.name,
+          'file'      => r_file,
           'line'      => e_line,
-          #'source'    => '',
+          'source'    => source(e_file)[e_line-1].strip,
           'snippet'   => code_snippet(e_file, e_line),
           'backtrace' => filter_backtrace(e.backtrace)
         },
@@ -301,6 +309,7 @@ module MiniTest
     def tapout_error(suite, test, test_runner)
       e = test_runner.exception
       e_file, e_line = location(test_runner.exception)
+      r_file = e_file.sub(Dir.pwd+'/', '')
 
       doc = {
         'type'        => 'test',
@@ -323,10 +332,10 @@ module MiniTest
         #  'code' => Foo#*
         'exception' => {
           'message'   => clean_message("#{e.class}: #{e.message}"),
-          'class'     => e.name,
-          'file'      => e_file,
+          'class'     => e.class.name,
+          'file'      => r_file,
           'line'      => e_line,
-          #'source'    => '',
+          'source'    => source(e_file)[e_line-1].strip,
           'snippet'   => code_snippet(e_file, e_line),
           'backtrace' => filter_backtrace(e.backtrace)
         },
@@ -335,64 +344,45 @@ module MiniTest
       return doc
     end
 
-    # TODO: Use Rubinius exclusion system.
-    INTERNALS = /(lib|bin)#{Regexp.escape(File::SEPARATOR)}tapout/
-
     #
-    def filter_backtrace(bt)
-      bt = clean_backtrace(bt)
-      bt = MiniTest::filter_backtrace(bt)
-      bt
-    end
+    #def filter_backtrace(backtrace)
+    #  trace = backtrace
+    #  trace = clean_backtrace(trace)
+    #  trace = MiniTest::filter_backtrace(trace)
+    #  trace
+    #end
 
-    # Clean the backtrace of any reference to ko/ paths and code.
-    def clean_backtrace(backtrace)
-      trace = backtrace.reject{ |bt| bt =~ INTERNALS }
+    # Clean the backtrace of any reference to test framework itself.
+    def filter_backtrace(backtrace)
+      ## remove backtraces that match any pattern in IGNORE_CALLERS
+      trace = backtrace.reject{|b| IGNORE_CALLERS.any?{|i| i=~b}}
+      ## remove `:in ...` portion of backtraces
       trace = trace.map do |bt| 
-        if i = bt.index(':in')
-          bt[0...i]
-        else
-          bt
-        end
+        i = bt.index(':in')
+        i ? bt[0...i] :  bt
       end
+      ## now apply MiniTest's own filter (note: doesn't work if done first, why?)
+      trace = MiniTest::filter_backtrace(trace)
+      ## if the backtrace is empty now then revert to the original
       trace = backtrace if trace.empty?
+      ## simplify paths to be relative to current workding diectory
       trace = trace.map{ |bt| bt.sub(Dir.pwd+File::SEPARATOR,'') }
-      trace
+      return trace
     end
 
     # Returns a String of source code.
     def code_snippet(file, line)
       s = []
+      if File.file?(file)
+        source = source(file)
+        radius = 2 # TODO: make customizable (number of surrounding lines to show)
+        region = [line - radius, 1].max ..
+                 [line + radius, source.length].min
 
-      #case snippet
-      #when String
-      #  lines = snippet.lines.to_a
-      #  index = line - ((lines.size - 1) / 2)
-      #  lines.each do |line|
-      #    s << [index, line]
-      #    index += 1
-      #  end
-      #when Array
-      #  snippet.each do |h|
-      #    s << [h.key, h.value]
-      #  end
-      #else
-        ##backtrace = exception.backtrace.reject{ |bt| bt =~ INTERNALS }
-        ##backtrace.first =~ /(.+?):(\d+(?=:|\z))/ or return ""
-        #caller =~ /(.+?):(\d+(?=:|\z))/ or return ""
-        #source_file, source_line = $1, $2.to_i
-
-        if File.file?(file)
-          source = source(file)
-          radius = 2 # TODO: make customizable (number of surrounding lines to show)
-          region = [line - radius, 1].max ..
-                   [line + radius, source.length].min
-
-          s = region.map do |n|
-            {n => source[n-1].chomp}
-          end
+        s = region.map do |n|
+          {n => source[n-1].chomp}
         end
-      #end
+      end
       return s
     end
 
@@ -507,7 +497,7 @@ module MiniTest
 
   #
   class TapJ < MiniTap
-    def initialize
+    def initializebacktrace
       require 'json'
       super
     end
