@@ -2,10 +2,10 @@
 
 == 0.3.1 / 2011-10-18
 
-This release include two basic improvements: better backtrace filtering
-and file fields are given relative to current working directory
-instead of absolute paths. In future maybe this can be configurable,
-if someone makes the case that absolute paths are needed.
+This release includes two basic improvements: better backtrace filtering,
+and file fields given relative to current working directory instead of
+absolute paths. In future maybe this can be configurable, if someone makes
+the case that absolute paths are needed.
 
 Changes:
 
@@ -31,7 +31,7 @@ the hood.
 
 Changes:
 
-* Adjust usage decumentation.
+* Adjust usage documentation.
 
 
 == 0.1.0 / 2011-10-06
