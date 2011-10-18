@@ -1,6 +1,6 @@
 ---
 name    : minitap
-version : 0.3.0
+version : 0.3.1
 title   : MiniTap 
 summary : TAP-Y/J reporters for MiniTest
 description:

@@ -1,9 +1,21 @@
 = RELEASE HISTORY
 
+== 0.3.1 / 2011-10-18
+
+This release include two basic improvements: better backtrace filtering
+and file fields are given relative to current working directory
+instead of absolute paths. In future maybe this can be configurable,
+if someone makes the case that absolute paths are needed.
+
+Changes:
+
+* Improve backtrace filtering.
+* Make file fields relative to working directory.
+
 
 == 0.3.0 / 2011-10-09
 
-Support version 3 of TAP-Y/H spec. This simply entailed renaming
+Support version 3 of TAP-Y/J spec. This simply entailed renaming
 the `tally` document to `final`.
 
 Changes:

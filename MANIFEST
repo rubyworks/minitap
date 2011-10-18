@@ -1,6 +1,10 @@
 #!mast .ruby .yardopts bin lib man spec test [A-Z]*.*
 .ruby
+lib/minitap/ignore_callers.rb
 lib/minitap.rb
+spec/applique/cli.rb
+spec/fixtures/tapy.yml
+spec/minitap.rdoc
 HISTORY.rdoc
 README.rdoc
 COPYING.rdoc

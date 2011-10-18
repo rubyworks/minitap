@@ -29,9 +29,9 @@ load_path:
 extra: {}
 name: minitap
 title: MiniTap
-date: '2011-10-09'
+date: '2011-10-18'
 alternatives: []
-version: 0.3.0
+version: 0.3.1
 revision: 0
 source:
 - ruby.yml
