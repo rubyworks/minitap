@@ -1,13 +1,15 @@
 ---
+source:
+- meta
 authors:
-- name: Thomas Sawyer
+- name: trans
   email: transfire@gmail.com
 copyrights:
-- holder: Thomas Sawyer
+- holder: Rubyworks
   year: '2011'
   license: BSD-2-Clause
 replacements: []
-conflicts: []
+alternatives: []
 requirements:
 - name: tapout
   version: ! '>= 0.3.0'
@@ -20,21 +22,23 @@ requirements:
   - build
   development: true
 dependencies: []
-repositories: []
+conflicts: []
+repositories:
+- uri: git://github.com/rubyworks/minitap.git
+  scm: git
+  name: upstream
 resources:
   home: http://rubyworks.github.com/minitap
   code: http://github.com/rubyworks/minitap
+extra: {}
 load_path:
 - lib
-extra: {}
-name: minitap
-title: MiniTap
-date: '2011-10-18'
-alternatives: []
-version: 0.3.1
 revision: 0
-source:
-- ruby.yml
 summary: TAP-Y/J reporters for MiniTest
+title: MiniTap
+version: 0.3.2
+name: minitap
 description: MiniTap provides a custom MiniTest reporter that outs TAP-Y or TAP-J
   formatted output.
+organization: rubyworks
+date: '2011-11-05'

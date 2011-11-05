@@ -1,0 +1,4 @@
+---
+- tapout >= 0.3.0
+- detroit (build)
+- reap    (build)
