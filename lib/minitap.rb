@@ -331,7 +331,7 @@ module MiniTest
         #  'line' => 11..13
         #  'code' => Foo#*
         'exception' => {
-          'message'   => clean_message("#{e.class}: #{e.message}"),
+          'message'   => clean_message(e.message),
           'class'     => e.class.name,
           'file'      => r_file,
           'line'      => e_line,
