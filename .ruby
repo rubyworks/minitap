@@ -13,6 +13,7 @@ alternatives: []
 requirements:
 - name: tapout
   version: ! '>= 0.3.0'
+- name: minitest
 - name: detroit
   groups:
   - build
