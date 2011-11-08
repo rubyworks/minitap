@@ -34,7 +34,10 @@ repositories:
   name: upstream
 resources:
   home: http://rubyworks.github.com/minitap
+  docs: http://rubydoc.info/gems/minitap
   code: http://github.com/rubyworks/minitap
+  bugs: http://github.com/rubyworks/minitap/issues
+  mail: http://groups.google.com/group/rubyworks-mailinglist
 extra: {}
 load_path:
 - lib
