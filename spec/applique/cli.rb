@@ -7,7 +7,13 @@ end
 When 'Running it with the (((.*?))) format' do |type|
   File.open('test.rb', 'w'){ |f| f << test_helper(type) + "\n\n" + @test }
   @out    = `ruby test.rb`
-  @stream = YAML.load_documents(@out)
+
+  #@stream = YAML.load_documents(@out)  # b/c of bug in Ruby 1.8
+  @stream = (
+    s = []
+    YAML.load_documents(@out){ |d| s << d }
+    s
+  )
 end
 
 #When '(((\w+))) reporter should run without error' do |format|
