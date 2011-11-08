@@ -4,6 +4,8 @@
 {Documentation}[http://rubydoc.info/gems/minitap/frames] |
 {Development}[http://github.com/rubyworks/minitap]
 
+{<img src="http://travis-ci.org/rubyworks/minitap.png" />}[http://travis-ci.org/rubyworks/minitap]
+
 
 == Description
 
