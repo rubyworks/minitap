@@ -3,10 +3,13 @@
 == 0.3.2 | 2011-11-08
 
 This release add support for new TAP-Y/J class field, and removes
-the class name from the message field.
+the class name from the message field. It also fixes a bug that
+arose with certain versions of Ruby's YAML.load_documents implmentation.
 
 Changes:
 
+* Work around Ruby's YAML.load_documents issue.
+* Add dependency for MiniTest.
 * Support TAP-Y/J class field.
 * Remove class name from message field.
 
