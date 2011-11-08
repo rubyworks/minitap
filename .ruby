@@ -1,6 +1,6 @@
 ---
 source:
-- meta
+- var
 authors:
 - name: trans
   email: transfire@gmail.com
@@ -41,4 +41,4 @@ name: minitap
 description: MiniTap provides a custom MiniTest reporter that outs TAP-Y or TAP-J
   formatted output.
 organization: rubyworks
-date: '2011-11-05'
+date: '2011-11-08'
