@@ -1,0 +1,8 @@
+--title "MiniTAP"
+--readme README.rdoc
+--protected
+--private
+lib
+-
+[A-Z]*.*
+
