@@ -1,6 +1,9 @@
+.reap/digest
 .yardoc
+doc
 log
+man/**/*.1
+man/**/*.html
 pkg
-site/doc
 tmp
-pages
+web

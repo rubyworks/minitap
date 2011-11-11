@@ -1,34 +1,31 @@
 ---
 gem:
-  service: Gem
   active : true
 
 github:
-  service: github
-  active: true
+  gh_pages: web
+
+qed:
+  files: qed
+
+qedoc:
+  files: qed/
+  title: MiniTAP Demonstrandum
+  output: QED.rdoc
 
 dnote:
-  service  : DNote
-  labels   : ~
-  output   : log/NOTES.rdoc
-  active   : true
+  title: Developer's Notes
+  labels: ~
+  output: log/notes.html
+  active: true
 
 vclog:
-  service  : VClog
-  output   : log/CHANGELOG.rdoc
-  active   : false
+  output:
+   - log/changes.html
+   - log/history.html
 
 email:
-  service : Email
-  file    : ~
-  subject : ~
-  mailto  : ruby-talk@ruby-lang.org
-#  from    : transfire@gmail.com
-#  server  : <%= ENV['EMAIL_SERVER'] %>
-#  port    : <%= ENV['EMAIL_PORT'] %>
-#  account : <%= ENV['EMAIL_ACCOUNT'] %>
-#  domain  : <%= ENV['EMAIL_DOMAIN'] %>
-#  login   : <%= ENV['EMAIL_LOGIN'] %>
-#  secure  : <%= ENV['EMAIL_SECURE'] %>
-  active  : true
+  mailto:
+    - ruby-talk@ruby-lang.org
+    - rubyworks-mailinglist@googlegroups.com
 
