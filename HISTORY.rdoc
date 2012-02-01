@@ -5,7 +5,7 @@
 This release adds support for the new 'stdout' and 'stderr' fields.
 As tests are run $stdout and $stderr are captured and included in
 the TAP-Y/J stream. This prevents the structured streams from being
-corupted and provide some nice report options too.
+corrupted and provide some nice report options too.
 
 Changes:
 
