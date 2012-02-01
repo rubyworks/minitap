@@ -24,7 +24,7 @@ module MiniTest
   class MiniTap < ::MiniTest::Unit
 
     # TAP-Y/J Revision
-    REVISION = 3
+    REVISION = 4
 
     # Backtrace patterns to be omitted.
     IGNORE_CALLERS = ::RUBY_IGNORE_CALLERS
@@ -117,7 +117,7 @@ module MiniTest
       send("tapout_#{callback}", *args)
     end
 
-    private
+  private
 
     #    
     def filtered_tests(suite, type)
@@ -224,6 +224,11 @@ module MiniTest
         #  code: Foo#*
         'time' => Time.now - self.suite_start_time
       }
+
+      stdout, stderr = test_runner.stdout, test_runner.stderr
+      doc['stdout'] = stdout unless stdout.empty?
+      doc['stderr'] = stderr unless stderr.empty?
+
       return doc
     end
 
@@ -302,6 +307,11 @@ module MiniTest
         },
         'time' => Time.now - self.suite_start_time
       }
+
+      stdout, stderr = test_runner.stdout, test_runner.stderr
+      doc['stdout'] = stdout unless stdout.empty?
+      doc['stderr'] = stderr unless stderr.empty?
+
       return doc
     end
 
@@ -341,6 +351,11 @@ module MiniTest
         },
         'time' => Time.now - self.suite_start_time
       }
+
+      stdout, stderr = test_runner.stdout, test_runner.stderr
+      doc['stdout'] = stdout unless stdout.empty?
+      doc['stderr'] = stderr unless stderr.empty?
+
       return doc
     end
 
@@ -405,7 +420,7 @@ module MiniTest
       end
       caller =~ /(.+?):(\d+(?=:|\z))/ or return ""
       source_file, source_line = $1, $2.to_i
-      returnf source_file, source_line
+      return source_file, source_line
     end
 
     # Get location of exception.
@@ -437,7 +452,8 @@ module MiniTest
   # @see https://github.com/seattlerb/minitest MiniTest
   class TestRunner
     attr_reader :suite, :test, :assertions, :result, :exception
-    
+    attr_reader :stdout, :stderr
+
     def initialize(suite, test)
       @suite = suite
       @test = test
@@ -446,10 +462,14 @@ module MiniTest
     
     def run
       suite_instance = suite.new(test)
-      @result, @exception = fix_result(suite_instance.run(self))
+      test_result = nil
+      @stdout, @stderr = capture_io do
+        test_result = suite_instance.run(self)
+      end
+      @result, @exception = fix_result(test_result)
       @assertions = suite_instance._assertions
     end
-    
+
     def puke(suite, test, exception)
       case exception
       when MiniTest::Skip then [:skip, exception]
@@ -458,17 +478,32 @@ module MiniTest
       end
     end
     
-    private
+  private
     
+    #
     def fix_result(result)
       result == '.' ? [:pass, nil] : result
+    end
+
+    #
+    def capture_io
+      ostdout, ostderr = $stdout, $stderr
+      cstdout, cstderr = StringIO.new, StringIO.new
+      $stdout, $stderr = cstdout, cstderr
+
+      yield
+
+      return cstdout.string.chomp("\n"), cstderr.string.chomp("\n")
+    ensure
+      $stdout = ostdout
+      $stderr = ostderr
     end
   end
 
   #
   class TapY < MiniTap
     def initialize
-      require 'yaml'
+      require 'yaml' unless respond_to?(:to_yaml)
       super
     end
     def tapout_before_suites(suites, type)
@@ -497,8 +532,8 @@ module MiniTest
 
   #
   class TapJ < MiniTap
-    def initializebacktrace
-      require 'json'
+    def initialize
+      require 'json' unless respond_to?(:to_json)
       super
     end
     def tapout_before_suites(suites, type)

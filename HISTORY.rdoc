@@ -1,10 +1,22 @@
 = RELEASE HISTORY
 
+== 0.3.3 | 2012-02-01
+
+This release adds support for the new 'stdout' and 'stderr' fields.
+As tests are run $stdout and $stderr are captured and included in
+the TAP-Y/J stream. This prevents the structured streams from being
+corupted and provide some nice report options too.
+
+Changes:
+
+* Add support for stdout and stderr capturing.
+
+
 == 0.3.2 | 2011-11-08
 
-This release add support for new TAP-Y/J class field, and removes
+This release add support for the new TAP-Y/J 'class' field, and removes
 the class name from the message field. It also fixes a bug that
-arose with certain versions of Ruby's YAML.load_documents implmentation.
+arose with certain versions of Ruby's YAML.load_documents implementation.
 
 Changes:
 
