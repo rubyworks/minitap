@@ -1,1 +1,1 @@
-MiniTap provides a custom MiniTest reporter that outs TAP-Y or TAP-J formatted output.
+MiniTap provides a MiniTest TAP-Y/J report format suitable for use with TAPOUT.

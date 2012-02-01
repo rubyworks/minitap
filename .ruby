@@ -50,7 +50,7 @@ summary: TAP-Y/J reporters for MiniTest
 title: MiniTap
 version: 0.3.3
 name: minitap
-description: MiniTap provides a custom MiniTest reporter that outs TAP-Y or TAP-J
-  formatted output.
+description: MiniTap provides a MiniTest TAP-Y/J report format suitable for use with
+  TAPOUT.
 organization: rubyworks
 date: '2012-02-01'
