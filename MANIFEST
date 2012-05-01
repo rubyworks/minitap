@@ -2,6 +2,8 @@
 .ruby
 .yardopts
 lib/minitap/ignore_callers.rb
+lib/minitap/tapj.rb
+lib/minitap/tapy.rb
 lib/minitap.rb
 spec/applique/ae.rb
 spec/applique/cli.rb
@@ -9,4 +11,5 @@ spec/fixtures/tapy.yml
 spec/minitap.rdoc
 HISTORY.rdoc
 README.rdoc
+QED.rdoc
 COPYING.rdoc
