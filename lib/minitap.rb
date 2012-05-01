@@ -234,7 +234,7 @@ module MiniTest
 
     #
     def tapout_skip(suite, test, test_runner)
-      e = test_runner.exeception
+      e = test_runner.exception
       e_file, e_line = location(test_runner.exception)
       r_file = e_file.sub(Dir.pwd+'/', '')
 
