@@ -7,7 +7,7 @@ when a test was skipped.
 
 Changes:
 
-* Fix misspelling of the word 'exception'.
+* Fix misspelling of the word 'exception'. (#2 Corey O'Connor)
 
 
 == 0.3.3 | 2012-02-01

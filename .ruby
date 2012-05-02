@@ -37,20 +37,20 @@ repositories:
   name: upstream
 resources:
 - uri: http://rubyworks.github.com/minitap
-  name: home
+  label: Website
   type: home
 - uri: http://rubydoc.info/gems/minitap
-  name: docs
-  type: doc
+  type: docs
 - uri: http://github.com/rubyworks/minitap
-  name: code
+  label: Source Code
   type: code
 - uri: http://github.com/rubyworks/minitap/issues
-  name: bugs
+  label: Issue Tracker
   type: bugs
 - uri: http://groups.google.com/group/rubyworks-mailinglist
-  name: mail
+  label: Mailing List
   type: mail
+categories: []
 extra: {}
 load_path:
 - lib
@@ -62,4 +62,4 @@ name: minitap
 description: MiniTap provides a MiniTest TAP-Y/J report format suitable for use with
   TAPOUT.
 organization: rubyworks
-date: '2012-05-01'
+date: '2012-05-02'
