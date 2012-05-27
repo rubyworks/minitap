@@ -6,12 +6,12 @@ github:
   gh_pages: web
 
 qed:
-  files: spec
+  files: demo
 
 qedoc:
-  files: spec
+  files: demo
   title: MiniTAP Demonstrandum
-  output: QED.rdoc
+  output: DEMO.rdoc
 
 dnote:
   title: Developer's Notes
