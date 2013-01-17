@@ -1,6 +1,16 @@
-= RELEASE HISTORY
+# RELEASE HISTORY
 
-== 0.3.4 | 2012-05-01
+## 0.3.5 | 2013-01-17
+
+This release adds a #record method to the TestRunner to accomodate 
+recent changes to MiniTest.
+
+Changes:
+
+* Add TestRunner#record method.
+
+
+## 0.3.4 | 2012-05-01
 
 This release simply fixes a misspelling that caused an error
 when a test was skipped.
@@ -10,7 +20,7 @@ Changes:
 * Fix misspelling of the word 'exception'. (#2 Corey O'Connor)
 
 
-== 0.3.3 | 2012-02-01
+## 0.3.3 | 2012-02-01
 
 This release adds support for the new 'stdout' and 'stderr' fields.
 As tests are run $stdout and $stderr are captured and included in
@@ -22,7 +32,7 @@ Changes:
 * Add support for stdout and stderr capturing.
 
 
-== 0.3.2 | 2011-11-08
+## 0.3.2 | 2011-11-08
 
 This release add support for the new TAP-Y/J 'class' field, and removes
 the class name from the message field. It also fixes a bug that
@@ -36,7 +46,7 @@ Changes:
 * Remove class name from message field.
 
 
-== 0.3.1 | 2011-10-18
+## 0.3.1 | 2011-10-18
 
 This release includes two basic improvements: better backtrace filtering,
 and file fields given relative to current working directory instead of
@@ -49,7 +59,7 @@ Changes:
 * Make file fields relative to working directory.
 
 
-== 0.3.0 | 2011-10-09
+## 0.3.0 | 2011-10-09
 
 Support version 3 of TAP-Y/J spec. This simply entailed renaming
 the `tally` document to `final`.
@@ -59,7 +69,7 @@ Changes:
 * Support revision 3 of TAP-Y/J.
 
 
-== 0.2.0 | 2011-10-07
+## 0.2.0 | 2011-10-07
 
 This release adjusts how the customer reporter classes
 should be used. It's actually a very minor release under 
@@ -70,7 +80,7 @@ Changes:
 * Adjust usage documentation.
 
 
-== 0.1.0 | 2011-10-06
+## 0.1.0 | 2011-10-06
 
 This is the first release of MiniTap, a TAP-Y/J reporter
 for the MiniTest test framework.

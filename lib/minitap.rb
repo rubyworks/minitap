@@ -478,6 +478,9 @@ module MiniTest
       end
     end
     
+    def record suite, method, assertions, time, error
+    end
+
   private
     
     #

@@ -1,0 +1,66 @@
+---
+type: ruby
+revision: 2013
+sources:
+- var
+authors:
+- name: trans
+  email: transfire@gmail.com
+organizations: []
+requirements:
+- version: ! '>= 0.3.0'
+  name: tapout
+- name: minitest
+- groups:
+  - build
+  development: true
+  name: detroit
+- groups:
+  - build
+  development: true
+  name: reap
+- groups:
+  - test
+  development: true
+  name: qed
+- groups:
+  - test
+  development: true
+  name: ae
+conflicts: []
+alternatives: []
+resources:
+- type: home
+  uri: http://rubyworks.github.com/minitap
+  label: Homepage
+- type: docs
+  uri: http://rubydoc.info/gems/minitap
+  label: Documentation
+- type: code
+  uri: http://github.com/rubyworks/minitap
+  label: Source Code
+- type: bugs
+  uri: http://github.com/rubyworks/minitap/issues
+  label: Issue Tracker
+- type: mail
+  uri: http://groups.google.com/group/rubyworks-mailinglist
+  label: Mailing List
+repositories:
+- name: upstream
+  scm: git
+  uri: git://github.com/rubyworks/minitap.git
+categories: []
+paths:
+  load:
+  - lib
+copyrights:
+- holder: Rubyworks
+  year: '2011'
+  license: BSD-2-Clause
+summary: TAP-Y/J reporters for MiniTest
+title: MiniTap
+version: 0.3.5
+name: minitap
+description: MiniTap provides a MiniTest TAP-Y/J report format suitable for use with
+  TAPOUT.
+date: '2013-01-17'
