@@ -1,58 +1,56 @@
-= MiniTap
-
-{Website}[http://rubyworks.github.com/minitap] |
-{Documentation}[http://rubydoc.info/gems/minitap/frames] |
-{Development}[http://github.com/rubyworks/minitap]
-
-{<img src="http://travis-ci.org/rubyworks/minitap.png" />}[http://travis-ci.org/rubyworks/minitap]
+[Website](http://rubyworks.github.com/minitap) |
+[Documentation](http://rubydoc.info/gems/minitap/frames) |
+[Report Issue](http://github.com/rubyworks/minitap/issues) |
+[Source Code](http://github.com/rubyworks/minitap)
+( [![Build Status](https://travis-ci.org/rubyworks/minitap.png)](https://travis-ci.org/rubyworks/minitap) )
 
 
-== Description
+# MiniTap
 
 The MiniTap project provides a TAP-Y and TAP-J output reporters for
 the MiniTest test framework --the test framework that comes standard
 with Ruby 1.9+.
 
-See {TAPOUT}[http://rubyworks.github.com/tapout] for more information about
+See [TAPOUT](http://rubyworks.github.com/tapout) for more information about
 TAP-Y/J formats.
 
 
-== Usage
+## Usage
 
 MiniTest supports custom report format by setting `MiniTest::Unit.runner` to
 an instance of a custom runner class. In this case we want to set it to an
 instance of `MiniTest::TapY` or `MiniTest::TapJ`. So in your project's test
 helper script add, e.g.
 
-  require 'minitap'
-  MiniTest::Unit.runner = MiniTest::TapY.new
+    require 'minitap'
+    MiniTest::Unit.runner = MiniTest::TapY.new
 
 Now you may want to set this up so it is selectable. In which case use an
 environment variable.
 
-  MiniTest::Unit.runner = \
-    case ENV['rpt']
-    when 'tapy'
-      MiniTest::TapY.new
-    when 'tapj'
-      MiniTest::TapJ.new
-    end
+    MiniTest::Unit.runner = \
+      case ENV['rpt']
+      when 'tapy'
+        MiniTest::TapY.new
+      when 'tapj'
+        MiniTest::TapJ.new
+      end
 
 Then you can do, e.g.
 
-  $ rpt=tapy ruby test/some_test.rb
+    $ rpt=tapy ruby test/some_test.rb
 
 Now to do something interesting with the TAP-Y/J output, you will probably want
 to install `tapout`:
 
-  $ gem install tapout
+    $ gem install tapout
 
 Then pipe the output to the `tapout` command, e.g.
 
-  $ rpt=tapy ruby test/some_test.rb | tapout progressbar
+    $ rpt=tapy ruby test/some_test.rb | tapout progressbar
 
 
-== Copying
+## Copying
 
 Copyright (c) 2011 Rubyworks
 

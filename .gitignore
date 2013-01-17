@@ -7,4 +7,4 @@ man/**/*.html
 pkg
 tmp
 web
-QED.rdoc
+QED.md

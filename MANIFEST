@@ -1,15 +1,13 @@
-#!mast .ruby .yardopts bin lib man spec test [A-Z]*.*
+#!mast .index .ruby .yardopts bin lib man spec test *.md *.txt
+.index
 .ruby
 .yardopts
 lib/minitap/ignore_callers.rb
 lib/minitap/tapj.rb
 lib/minitap/tapy.rb
 lib/minitap.rb
-spec/applique/ae.rb
-spec/applique/cli.rb
-spec/fixtures/tapy.yml
-spec/minitap.rdoc
-HISTORY.rdoc
-README.rdoc
-QED.rdoc
-COPYING.rdoc
+HISTORY.md
+README.md
+QED.md
+NOTICE.md
+LICENSE.txt

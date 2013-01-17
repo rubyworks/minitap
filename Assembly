@@ -11,7 +11,7 @@ qed:
 qedoc:
   files: demo
   title: MiniTAP Demonstrandum
-  output: DEMO.rdoc
+  output: QED.md
 
 dnote:
   title: Developer's Notes

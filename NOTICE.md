@@ -1,10 +1,10 @@
-= COPYRIGHT NOTICES
+# COPYRIGHT NOTICES
 
-== MiniTap
+## MiniTap
 
-Copyright:: (c) 2011 Rubyworks
-License:: BSD-2-Clause
-Website:: http://rubyworks.github.com/tapout
+* Copyright: (c) 2011 Rubyworks
+* License: BSD-2-Clause
+* Website: http://rubyworks.github.com/tapout
 
     Copyright 2011 Rubyworks. All rights reserved.
 
@@ -30,11 +30,11 @@ Website:: http://rubyworks.github.com/tapout
     EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-== MiniTest Reporter
+## MiniTest Reporter
 
-Copyright:: (c) 2011 Alexander Kern
-License:: MIT
-Website:: https://github.com/CapnKernul/minitest-reporters
+* Copyright: (c) 2011 Alexander Kern
+* License: MIT
+* Website: https://github.com/CapnKernul/minitest-reporters
 
     Copyright (c) 2011 Alexander Kern
 
