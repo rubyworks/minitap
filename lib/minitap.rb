@@ -477,8 +477,8 @@ module MiniTest
       else [:error, exception]
       end
     end
-    
-    def record suite, method, assertions, time, error
+
+    def record(suite, method, assertions, time, error)
     end
 
   private

@@ -6,7 +6,7 @@ end
 
 When 'Running it with the (((.*?))) format' do |type|
   File.open('test.rb', 'w'){ |f| f << test_helper(type) + "\n\n" + @test }
-  @out    = `ruby test.rb`
+  @out    = `ruby -I../../lib test.rb`
 
   #@stream = YAML.load_documents(@out)  # b/c of bug in Ruby 1.8
   @stream = (
