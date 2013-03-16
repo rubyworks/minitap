@@ -1,5 +1,11 @@
 # MiniTest adaptor for tapout.
 
+# B/c Ruby is so fucked up.
+begin
+  gem 'minitest'
+rescue
+end
+
 require 'minitest/unit'
 require 'minitap/ignore_callers'
 require 'stringio'
@@ -11,15 +17,11 @@ require 'stringio'
 
 module MiniTest
 
+  ##
   # Base class for TapY and TapJ runners.
   # 
-  # This is a heavily refactored version of the built-in MiniTest runner. It's
-  # about the same speed, from what I can tell, but is significantly easier to
-  # extend.
-  # 
-  # Based upon Ryan Davis of Seattle.rb's MiniTest (MIT License).
-  # 
-  # @see https://github.com/seattlerb/minitest MiniTest
+  # Based upon Alexander Kern's MiniTest-Reporters (MIT License).
+  # @see https://github.com/CapnKernul/minitest-reporters
   #
   class MiniTap < ::MiniTest::Unit
 
@@ -29,93 +31,99 @@ module MiniTest
     # Backtrace patterns to be omitted.
     IGNORE_CALLERS = ::RUBY_IGNORE_CALLERS
 
-    #
-    attr_accessor :suite_start_time, :test_start_time, :reporters
-    
+    attr_reader :test_results
+
+    attr_accessor :suites_start_time
+    attr_accessor :suite_start_time
+    attr_accessor :test_start_time
+
     # Initialize new MiniTap MiniTest runner.
     def initialize
-      self.report = {}
-      self.errors = 0
-      self.failures = 0
-      self.skips = 0
-      self.test_count = 0
-      self.assertion_count = 0
-      self.verbose = false
-      self.reporters = []
+      super
 
+      @test_results = {}
+      #self.assertion_count = 0
       @_source_cache = {}
     end
 
-    # Top level driver, controls all output and filtering.
-    def _run args = []
-      self.options = process_args(args)
+    def _run_suites(suites, type)
+      #output.puts "# Run options: #{@help}"
 
-      self.class.plugins.each do |plugin|
-        send plugin
-        break unless report.empty?
-      end
-
-      return failures + errors if @test_count > 0 # or return nil...
-    rescue Interrupt
-      abort 'Interrupted'
+      @suites_start_time = Time.now
+      count_tests!(suites, type)
+      trigger_callback(:before_suites, suites, type)
+      super(suites, type)
+    ensure
+      trigger_callback(:after_suites, suites, type)
     end
 
-    #
-    def _run_anything(type)
-      self.start_time = Time.now
-      
-      suites = suites_of_type(type)
-      tests = suites.inject({}) do |acc, suite|
-        acc[suite] = filtered_tests(suite, type)
-        acc
-      end
-      
-      self.test_count = tests.inject(0) { |acc, suite| acc + suite[1].length }
-      
-      if test_count > 0
-        trigger(:before_suites, suites, type)
-        
-        fix_sync do
-          suites.each { |suite| _run_suite(suite, tests[suite]) }
+    def _run_suite(suite, type)
+      # The only reason this is here is b/c MiniTest wil try to run
+      # base classes like `MiniTest::Spec`. So to prevent that,
+      # if there are no tests to run, we don't bother to process
+      # the "suite" at all.
+      @_suite_tests = suite.send("#{type}_methods")
+      return [0,0] if @_suite_tests.empty?
+
+      begin
+        @suite_start_time = Time.now
+        trigger_callback(:before_suite, suite)
+
+        super_result = nil
+        @_stdout, @_stderr = capture_io do
+          super_result = super(suite, type)
         end
-        
-        trigger(:after_suites, suites, type)
+        super_result
+      ensure
+        trigger_callback(:after_suite, suite)
       end
     end
-    
-    def _run_suite(suite, tests)
-      unless tests.empty?
-        begin
-          self.suite_start_time = Time.now
-          
-          trigger(:before_suite, suite)
-          suite.startup if suite.respond_to?(:startup)
-          
-          tests.each { |test| _run_test(suite, test) }
-        ensure
-          suite.shutdown if suite.respond_to?(:shutdown)
-          trigger(:after_suite, suite)
-        end
-      end
-    end
-    
-    #
-    def _run_test(suite, test)
-      self.test_start_time = Time.now
 
-      trigger(:before_test, suite, test)
-      
-      test_runner = TestRunner.new(suite, test)
-      test_runner.run
-      add_test_result(suite, test, test_runner)
-      
-      trigger(test_runner.result, suite, test, test_runner)
+    def before_test(suite, test)
+      @test_start_time = Time.now
+      trigger_callback(:before_test, suite, test)
     end
-    
-    #
-    def trigger(callback, *args)
+
+    def record(suite, test, assertions, time, exception)
+      record = TestRecord.new(suite, test.to_sym, assertions, time, exception)
+
+      #if ENV['minitap_debug'] && exception
+      #  STDERR.puts exception
+      #  STDERR.puts exception.backtrace.join("\n")
+      #end
+
+      @test_results[suite] ||= {}
+      @test_results[suite][test.to_sym] = record
+      #@test_recorder.record(runner)
+
+      # MiniTest < 4.1.0 sends #record after all teardown hooks, so explicitly
+      # call #after_test here after recording.
+      after_test(suite, test) if Unit::VERSION <= "4.1.0"
+    end
+
+    def after_test(suite, test)
+      #runners = @test_recorder[suite, test.to_sym]
+      #records = @test_results[suite][test.to_sym]
+      record = @test_results[suite][test.to_sym]
+
+      #records.each do |record|
+      #  trigger_callback(record.result, suite, test.to_sym, record)
+      #end
+
+      trigger_callback(record.result, suite, test.to_sym, record)
+
+      trigger_callback(:after_test, suite, test.to_sym)
+    end
+
+    # Trigger the tapout callback.
+    def trigger_callback(callback, *args)
       send("tapout_#{callback}", *args)
     end
+
+    # Stub out the three IO methods used by the built-in reporter.
+    def puts(*args); end
+    def print(*args); end
+    def status(io = output); end
 
   private
 
@@ -125,12 +133,13 @@ module MiniTest
       filter = Regexp.new($1) if filter =~ /\/(.*)\//
       suite.send("#{type}_methods").grep(filter)
     end
-    
+
     #
-    def suites_of_type(type)
-      TestCase.send("#{type}_suites")
-    end
-    
+    #def suites_of_type(type)
+    #  TestCase.send("#{type}_suites")
+    #end
+
+=begin
     #
     def add_test_result(suite, test, test_runner)
       self.report[suite] ||= {}
@@ -144,20 +153,22 @@ module MiniTest
       when :error then self.errors += 1
       end
     end
+=end
 
-    #
-    def fix_sync
-      sync = output.respond_to?(:'sync=') # stupid emacs
-      old_sync, output.sync = output.sync, true if sync
-      yield
-      output.sync = old_sync if sync
+    def count_tests!(suites, type)
+      filter = options[:filter] || '/./'
+      filter = Regexp.new $1 if filter =~ /\/(.*)\//
+
+      @test_count = suites.inject(0) do |acc, suite|
+        acc + suite.send("#{type}_methods").grep(filter).length
+      end
     end
 
     #
     def tapout_before_suites(suites, type)
       doc = {
         'type'  => 'suite',
-        'start' => self.start_time.strftime('%Y-%m-%d %H:%M:%S'),
+        'start' => self.suites_start_time.strftime('%Y-%m-%d %H:%M:%S'),
         'count' => self.test_count,
         'seed'  => self.options[:seed],
         'rev'   => REVISION
@@ -169,7 +180,7 @@ module MiniTest
     def tapout_after_suites(suites, type)
       doc = {
         'type' => 'final',
-        'time' => Time.now - self.test_start_time,
+        'time' => Time.now - self.suites_start_time,
         'counts' => {
           'total' => self.test_count,
           'pass'  => self.test_count - self.failures - self.errors - self.skips,
@@ -202,6 +213,10 @@ module MiniTest
     end
 
     #
+    def tapout_after_test(suite, test)
+    end
+
+    #
     def tapout_pass(suite, test, test_runner)
       doc = {
         'type'        => 'test',
@@ -225,7 +240,7 @@ module MiniTest
         'time' => Time.now - self.suite_start_time
       }
 
-      stdout, stderr = test_runner.stdout, test_runner.stderr
+      stdout, stderr = @_stdout, @_stderr
       doc['stdout'] = stdout unless stdout.empty?
       doc['stderr'] = stderr unless stderr.empty?
 
@@ -440,8 +455,36 @@ module MiniTest
       message.strip #.gsub(/\s*\n\s*/, "\n")
     end
 
+    #
+    def capture_io
+      ostdout, ostderr = $stdout, $stderr
+      cstdout, cstderr = StringIO.new, StringIO.new
+      $stdout, $stderr = cstdout, cstderr
+
+      yield
+
+      return cstdout.string.chomp("\n"), cstderr.string.chomp("\n")
+    ensure
+      $stdout = ostdout
+      $stderr = ostderr
+    end
+
   end
 
+  ##
+  #
+  class TestRecord < Struct.new(:suite, :test, :assertions, :time, :exception)
+    def result
+      case exception
+      when nil then :pass
+      when Skip then :skip
+      when Assertion then :failure
+      else :error
+      end
+    end
+  end
+
+=begin
   # Runner for individual MiniTest tests.
   # 
   # You *should not* create instances of this class directly. Instances of
@@ -502,34 +545,71 @@ module MiniTest
       $stderr = ostderr
     end
   end
+=end
 
+  ##
+  #
+  module AroundTestHooks
+    def self.before_test(instance)
+      MiniTest::Unit.runner.before_test(instance.class, instance.__name__)
+    end
+
+    def self.after_test(instance)
+      # MiniTest < 4.1.0 sends #record after all teardown hooks, so don't call
+      # #after_test here.
+      if MiniTest::Unit::VERSION > "4.1.0"
+        MiniTest::Unit.runner.after_test(instance.class, instance.__name__)
+      end
+    end
+
+    def before_setup
+      AroundTestHooks.before_test(self)
+      super
+    end
+
+    def after_teardown
+      super
+      AroundTestHooks.after_test(self)
+    end
+  end
+
+  class Unit::TestCase
+    include AroundTestHooks
+  end
+
+  ##
   #
   class TapY < MiniTap
     def initialize
       require 'yaml' unless respond_to?(:to_yaml)
       super
     end
+
     def tapout_before_suites(suites, type)
-      puts super(suites, type).to_yaml
+      wp super(suites, type).to_yaml
     end
     def tapout_before_suite(suite)
-      puts super(suite).to_yaml
+      wp super(suite).to_yaml
     end
     def tapout_pass(suite, test, test_runner)
-      puts super(suite, test, test_runner).to_yaml
+      wp super(suite, test, test_runner).to_yaml
     end
     def tapout_skip(suite, test, test_runner)
-      puts super(suite, test, test_runner).to_yaml
+      wp super(suite, test, test_runner).to_yaml
     end
     def tapout_failure(suite, test, test_runner)
-      puts super(suite, test, test_runner).to_yaml
+      wp super(suite, test, test_runner).to_yaml
     end
     def tapout_error(suite, test, test_runner)
-      puts super(suite, test, test_runner).to_yaml
+      wp super(suite, test, test_runner).to_yaml
     end
     def tapout_after_suites(suites, type)
-      puts super(suites, type).to_yaml
-      puts "..."
+      wp super(suites, type).to_yaml
+      wp "..."
+    end
+
+    def wp(str)
+      STDOUT.puts(str)
     end
   end
 
@@ -539,26 +619,31 @@ module MiniTest
       require 'json' unless respond_to?(:to_json)
       super
     end
+
     def tapout_before_suites(suites, type)
-      puts super(suites, type).to_json
+      wp super(suites, type).to_json
     end
     def tapout_before_suite(suite)
-      puts super(suite).to_json
+      wp super(suite).to_json
     end
     def tapout_pass(suite, test, test_runner)
-      puts super(suite, test, test_runner).to_json
+      wp super(suite, test, test_runner).to_json
     end
     def tapout_skip(suite, test, test_runner)
-      puts super(suite, test, test_runner).to_json
+      wp super(suite, test, test_runner).to_json
     end
     def tapout_failure(suite, test, test_runner)
-      puts super(suite, test, test_runner).to_json
+      wp super(suite, test, test_runner).to_json
     end
     def tapout_error(suite, test, test_runner)
-      puts super(suite, test, test_runner).to_json
+      wp super(suite, test, test_runner).to_json
     end
     def tapout_after_suites(suites, type)
-      puts super(suites, type).to_json
+      wp super(suites, type).to_json
+    end
+
+    def wp(str)
+      STDOUT.puts(str)
     end
   end
 

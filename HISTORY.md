@@ -1,5 +1,20 @@
 # RELEASE HISTORY
 
+## 0.4.0 | 2013-03-17
+
+MiniTap v0.4.0 is a heavy refactorization of the code based on
+Alexander Kern's latest MiniTest-Reporters code. (Thank you
+Mr. Kern! You made dealing with sorry Minitest code at least
+tolerable.) This release also owes gratitiude to Kevin Swope
+who's bug report about running on MiniTap with Rails led to
+the whole shebang.
+
+Changes:
+
+* Refactored runner to "catch-up" with the ever changing 
+  crap that is MiniTest's code.
+
+
 ## 0.3.5 | 2013-01-17
 
 This release adds a #record method to the TestRunner to accomodate 

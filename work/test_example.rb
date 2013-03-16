@@ -1,6 +1,11 @@
+require 'minitest/autorun'
+
 require 'minitap'
 MiniTest::Unit.runner = MiniTest::TapJ.new
-require 'minitest/autorun'
+
+#require "minitest/reporters"
+#MiniTest::Reporters.use! MiniTest::Reporters::SpecReporter.new
+
 #require 'active_support/core_ext' # why do i have to require this?
 
 class TestThis < MiniTest::Unit::TestCase
