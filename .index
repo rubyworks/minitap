@@ -60,4 +60,4 @@ version: 0.4.0
 name: minitap
 description: MiniTap provides a MiniTest TAP-Y/J report format suitable for use with
   TAPOUT.
-date: '2013-03-16'
+date: '2013-03-17'
