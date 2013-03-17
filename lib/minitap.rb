@@ -1,6 +1,5 @@
 # MiniTest adaptor for tapout.
 
-# B/c Ruby is so fucked up.
 begin
   gem 'minitest'
 rescue
@@ -41,6 +40,9 @@ module MiniTest
     def initialize
       super
 
+      @_stdout = ''
+      @_stderr = ''
+
       @test_results = {}
       #self.assertion_count = 0
       @_source_cache = {}
@@ -70,9 +72,9 @@ module MiniTest
         trigger_callback(:before_suite, suite)
 
         super_result = nil
-        @_stdout, @_stderr = capture_io do
+        #@_stdout, @_stderr = capture_io do
           super_result = super(suite, type)
-        end
+        #end
         super_result
       ensure
         trigger_callback(:after_suite, suite)
@@ -87,7 +89,7 @@ module MiniTest
     def record(suite, test, assertions, time, exception)
       record = TestRecord.new(suite, test.to_sym, assertions, time, exception)
 
-      #if ENV['minitap_debug'] && exception
+      #if exception #&& ENV['minitap_debug']
       #  STDERR.puts exception
       #  STDERR.puts exception.backtrace.join("\n")
       #end
@@ -112,7 +114,7 @@ module MiniTest
 
       trigger_callback(record.result, suite, test.to_sym, record)
 
-      trigger_callback(:after_test, suite, test.to_sym)
+      #trigger_callback(:after_test, suite, test.to_sym)
     end
 
     # Trigger the tapout callback.
@@ -323,7 +325,7 @@ module MiniTest
         'time' => Time.now - self.suite_start_time
       }
 
-      stdout, stderr = test_runner.stdout, test_runner.stderr
+      stdout, stderr = @_stdout, @_stderr
       doc['stdout'] = stdout unless stdout.empty?
       doc['stderr'] = stderr unless stderr.empty?
 
@@ -367,7 +369,7 @@ module MiniTest
         'time' => Time.now - self.suite_start_time
       }
 
-      stdout, stderr = test_runner.stdout, test_runner.stderr
+      stdout, stderr = @_stdout, @_stderr
       doc['stdout'] = stdout unless stdout.empty?
       doc['stderr'] = stderr unless stderr.empty?
 

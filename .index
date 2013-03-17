@@ -1,6 +1,6 @@
 ---
-type: ruby
 revision: 2013
+type: ruby
 sources:
 - var
 authors:
@@ -50,17 +50,18 @@ repositories:
   scm: git
   uri: git://github.com/rubyworks/minitap.git
 categories: []
-paths:
-  load:
-  - lib
 copyrights:
 - holder: Rubyworks
   year: '2011'
   license: BSD-2-Clause
+customs: []
+paths:
+  lib:
+  - lib
 summary: TAP-Y/J reporters for MiniTest
 title: MiniTap
-version: 0.3.5
+version: 0.4.0
 name: minitap
 description: MiniTap provides a MiniTest TAP-Y/J report format suitable for use with
   TAPOUT.
-date: '2013-01-17'
+date: '2013-03-16'
