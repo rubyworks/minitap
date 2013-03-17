@@ -1,7 +1,3 @@
-MiniTap (http://rubyworks.github.com/tapout)
-
-Copyright (c) 2011 Rubyworks
-
 BSD-2-Clause License
 
 Redistribution and use in source and binary forms, with or without
