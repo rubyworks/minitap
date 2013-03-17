@@ -2,23 +2,23 @@
 
 ## NOTICES
 
-1. [MiniTap](http://rubyworks.github.com/tapout)
+### [MiniTap](http://rubyworks.github.com/tapout)
 
-  Copyright (c) 2011 Rubyworks. All rights reserved.
+Copyright (c) 2011 Rubyworks. All rights reserved.
 
-  BSD-2-Clause License
+BSD-2-Clause License
 
 
-2. [MiniTest Reporters](https://github.com/CapnKernul/minitest-reporters)
+### [MiniTest Reporters](https://github.com/CapnKernul/minitest-reporters)
 
-  Copyright (c) 2011 Alexander Kern
+Copyright (c) 2011 Alexander Kern
 
-  MIT License
+MIT License
 
 
 ## LICENSES
 
-1. BSD-2-Clause License
+### BSD-2-Clause License
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are met:
@@ -41,7 +41,7 @@
     NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
     EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-2. MIT License
+### MIT License
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the
