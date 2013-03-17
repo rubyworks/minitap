@@ -1,11 +1,14 @@
+# MiniTap
+
 [Website](http://rubyworks.github.com/minitap) |
 [Documentation](http://rubydoc.info/gems/minitap/frames) |
 [Report Issue](http://github.com/rubyworks/minitap/issues) |
 [Source Code](http://github.com/rubyworks/minitap)
-( [![Build Status](https://travis-ci.org/rubyworks/minitap.png)](https://travis-ci.org/rubyworks/minitap) )
 
+[![Gem Version](https://badge.fury.io/rb/minitap.png)](http://badge.fury.io/rb/minitap)
+[![Build Status](https://travis-ci.org/rubyworks/minitap.png)](https://travis-ci.org/rubyworks/minitap) &nbsp; &nbsp;
+[![Flattr Me](http://api.flattr.com/button/flattr-badge-large.png)](http://flattr.com/thing/324911/Rubyworks-Ruby-Development-Fund)
 
-# MiniTap
 
 The MiniTap project provides a TAP-Y and TAP-J output reporters for
 the MiniTest test framework --the test framework that comes standard
