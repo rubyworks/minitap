@@ -1,7 +1,7 @@
 ---
 - tapout >= 0.3.0
 - minitest
-- detroit (build)
-- reap    (build)
+- ergo    (build)
 - qed     (test)
 - ae      (test)
+

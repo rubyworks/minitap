@@ -1,8 +1,9 @@
 --title "MiniTAP"
---readme README.rdoc
+--readme README.md
 --protected
 --private
 lib
 -
-[A-Z]*.*
+*.md
+*.txt
 

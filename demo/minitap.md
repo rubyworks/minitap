@@ -38,7 +38,7 @@ The second should be `case` entry.
     @stream[1]['level']  #=> 0
 
 The next three documents are the unit tests, which can occur in any order.
-There one that shoud have a status of `pass`, another of `fail` and the
+There's one that should have a status of `pass`, another of `fail` and the
 third of `error`.
 
     passing_test = @stream.find{ |d| d['type'] == 'test' && d['status'] == 'pass' }

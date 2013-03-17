@@ -14,11 +14,7 @@ requirements:
 - groups:
   - build
   development: true
-  name: detroit
-- groups:
-  - build
-  development: true
-  name: reap
+  name: ergo
 - groups:
   - test
   development: true
