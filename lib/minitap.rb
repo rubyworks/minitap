@@ -1,9 +1,7 @@
 # MiniTest adaptor for tapout.
 
-begin
-  gem 'minitest'
-rescue
-end
+# Have to make sure the latest version of minitest is used.
+begin; gem 'minitest'; rescue; end
 
 require 'minitest/unit'
 require 'minitap/ignore_callers'
@@ -28,8 +26,9 @@ module MiniTest
     REVISION = 4
 
     # Backtrace patterns to be omitted.
-    IGNORE_CALLERS = ::RUBY_IGNORE_CALLERS
+    IGNORE_CALLERS = $RUBY_IGNORE_CALLERS
 
+    # Test results.
     attr_reader :test_results
 
     attr_accessor :suites_start_time
@@ -474,6 +473,7 @@ module MiniTest
   end
 
   ##
+  # Used to keep a record of each test and it's result.
   #
   class TestRecord < Struct.new(:suite, :test, :assertions, :time, :exception)
     def result
@@ -550,17 +550,22 @@ module MiniTest
 =end
 
   ##
+  # Around advice.
   #
   module AroundTestHooks
     def self.before_test(instance)
-      MiniTest::Unit.runner.before_test(instance.class, instance.__name__)
+      if before_test = (MiniTest::Unit.runner.method(:before_test) rescue nil)
+        before_test.call(instance.class, instance.__name__)
+      end
     end
 
     def self.after_test(instance)
       # MiniTest < 4.1.0 sends #record after all teardown hooks, so don't call
       # #after_test here.
       if MiniTest::Unit::VERSION > "4.1.0"
-        MiniTest::Unit.runner.after_test(instance.class, instance.__name__)
+        if after_test = (MiniTest::Unit.runner.method(:after_test) rescue nil)
+          after_test.call(instance.class, instance.__name__)
+        end
       end
     end
 
@@ -580,6 +585,7 @@ module MiniTest
   end
 
   ##
+  # TAP-Y adapater.
   #
   class TapY < MiniTap
     def initialize
@@ -615,6 +621,8 @@ module MiniTest
     end
   end
 
+  ##
+  # TAP-J adapater.
   #
   class TapJ < MiniTap
     def initialize
