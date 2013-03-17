@@ -1,5 +1,17 @@
 # RELEASE HISTORY
 
+## 0.4.1 | 2013-03-18
+
+Minor release improves upon backtrace filtering and makes
+the hook extensions more robust when non-minitap runners
+are used even though minitap has been requried.
+
+Changes:
+
+* Use $RUBY_IGNORE_CALLERS for backtrace filtering.
+* Endure hook methods exist before using them.
+ 
+
 ## 0.4.0 | 2013-03-17
 
 MiniTap v0.4.0 is a heavy refactorization of the code based on

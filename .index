@@ -56,7 +56,7 @@ paths:
   - lib
 summary: TAP-Y/J reporters for MiniTest
 title: MiniTap
-version: 0.4.0
+version: 0.4.1
 name: minitap
 description: MiniTap provides a MiniTest TAP-Y/J report format suitable for use with
   TAPOUT.
