@@ -22,10 +22,41 @@ TAP-Y/J formats.
 
 ## Usage
 
-MiniTest supports custom report format by setting `MiniTest::Unit.runner` to
-an instance of a custom runner class. In this case we want to set it to an
-instance of `MiniTest::TapY` or `MiniTest::TapJ`. So in your project's test
-helper script add, e.g.
+### Minitest 5+
+
+MiniTest 5+ has new reporter system and plug-in API. Minitap takes advantage
+of this new API to allow the TAP-Y or TAP-J formats to be selected via command-line
+options instead of requiring that the format be set in the test helper scripts.
+Instead, simply add `--tapy` or `--tapj` after a isolated `-` separator on the
+ruby test command invocation, e.g.
+
+    $ ruby -Ilib test.runner.rb - --tapy
+
+In your test helper scripts be sure you have the standard Minitest line:
+
+    require 'minitap/autorun'
+
+And remove any old `MiniTest::Unit.runner=` assignments if you are migrating 
+from v4.
+
+Now to do something interesting with the TAP-Y/J output, you will probably want
+to install `tapout`:
+
+    $ gem install tapout
+
+Then pipe the output to the `tapout` command, e.g.
+
+    $ ruby test/some_test.rb - --tapy | tapout progressbar
+
+And that's all there is too it.
+
+
+### MiniTest 4
+
+If you are still using MiniTest v4 or less, custom report formats are set by 
+assigning `MiniTest::Unit.runner` to an instance of a custom runner class. 
+In our case we want to set it to an instance of `MiniTest::TapY` or `MiniTest::TapJ`.
+So in your project's test helper script add, e.g.
 
     require 'minitap'
     MiniTest::Unit.runner = MiniTest::TapY.new

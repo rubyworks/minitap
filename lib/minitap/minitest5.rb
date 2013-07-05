@@ -3,7 +3,7 @@
 # Have to make sure the latest version of minitest is used.
 begin; gem 'minitest'; rescue; end
 
-require 'minitest/unit'
+#require 'minitest/unit'
 require 'minitap/ignore_callers'
 require 'stringio'
 
@@ -12,15 +12,12 @@ require 'stringio'
 #require 'minitest/unit'
 #$DEBUG = debug
 
-module MiniTest
+module Minitest
 
   ##
   # Base class for TapY and TapJ runners.
-  # 
-  # Based upon Alexander Kern's MiniTest-Reporters (MIT License).
-  # @see https://github.com/CapnKernul/minitest-reporters
   #
-  class MiniTap < ::MiniTest::Unit
+  class Minitap < StatisticsReporter #Reporter
 
     # TAP-Y/J Revision
     REVISION = 4
@@ -29,24 +26,141 @@ module MiniTest
     IGNORE_CALLERS = $RUBY_IGNORE_CALLERS
 
     # Test results.
-    attr_reader :test_results
+    #attr_reader :test_results
 
-    attr_accessor :suites_start_time
+    attr_reader :test_cases
+    attr_reader :test_count
+
     attr_accessor :suite_start_time
+    attr_accessor :case_start_time
     attr_accessor :test_start_time
 
-    # Initialize new MiniTap MiniTest runner.
-    def initialize
-      super
+    # Initialize new Minitap Minitest reporter.
+    def initialize(io = $stdout, options = {})
+      super(io, options)
 
       @_stdout = ''
       @_stderr = ''
 
-      @test_results = {}
+      #@test_results = {}
       #self.assertion_count = 0
+
       @_source_cache = {}
     end
 
+    #
+    # Minitest's initial hook ran just before testing begins.
+    #
+    def start
+      super
+
+      @test_cases = Runnable.runnables
+
+      before_suite(@test_cases)
+    end
+
+    #
+    # Process a test result.
+    #
+    def record(minitest_result)
+      super(minitest_result)
+
+      result = TestResult.new(minitest_result)
+
+      #if exception #&& ENV['minitap_debug']
+      #  STDERR.puts exception
+      #  STDERR.puts exception.backtrace.join("\n")
+      #end
+
+      #@test_results[suite] ||= {}
+      #@test_results[suite][test.to_sym] = record
+
+      case_change = false
+
+      if @previous_case != result.test_case
+        case_change = true  
+        before_case(result.test_case)
+      end
+
+      before_test(result)
+      case result.type
+      when :skip
+        test_skip(result)
+      when :pass
+        test_pass(result)
+      when :fail
+        test_fail(result)
+      when :err
+        test_err(result)
+      end
+      after_test(result)
+
+      if case_change
+        after_case(result.test_case)
+      end
+
+      @previous_case = result.test_case
+    end
+
+    #
+    # Minitest's finalization hook.
+    #
+    def report
+      super
+
+      after_suite()
+    end
+
+    #
+    # Intermediary Callbacks
+    #
+
+    #
+    def before_suite(test_cases)
+      @suite_start_time = Time.now
+      count_tests!(test_cases)
+      tapout_before_suite()
+    end
+
+    def after_suite() #(test_cases)
+      tapout_after_suite()
+    end
+
+    def before_case(test_case)
+      @case_start_time = Time.now
+      tapout_before_case(test_case)
+    end
+
+    def after_case(test_case)
+      tapout_after_case(test_case)
+    end
+
+    def before_test(result)
+      @test_start_time = Time.now
+      tapout_before_test(result)
+    end
+
+    def after_test(result)
+      tapout_after_test(result)
+    end
+
+    def test_skip(result)
+      tapout_test_skip(result)
+    end
+
+    def test_pass(result)
+      tapout_test_pass(result)
+    end
+
+    def test_fail(result)
+      tapout_test_failure(result)
+    end
+
+    def test_err(result)
+      tapout_test_error(result)
+    end
+
+=begin
     def _run_suites(suites, type)
       #output.puts "# Run options: #{@help}"
 
@@ -85,23 +199,6 @@ module MiniTest
       trigger_callback(:before_test, suite, test)
     end
 
-    def record(suite, test, assertions, time, exception)
-      record = TestRecord.new(suite, test.to_sym, assertions, time, exception)
-
-      #if exception #&& ENV['minitap_debug']
-      #  STDERR.puts exception
-      #  STDERR.puts exception.backtrace.join("\n")
-      #end
-
-      @test_results[suite] ||= {}
-      @test_results[suite][test.to_sym] = record
-      #@test_recorder.record(runner)
-
-      # MiniTest < 4.1.0 sends #record after all teardown hooks, so explicitly
-      # call #after_test here after recording.
-      after_test(suite, test) if Unit::VERSION <= "4.1.0"
-    end
-
     def after_test(suite, test)
       #runners = @test_recorder[suite, test.to_sym]
       #records = @test_results[suite][test.to_sym]
@@ -115,11 +212,7 @@ module MiniTest
 
       #trigger_callback(:after_test, suite, test.to_sym)
     end
-
-    # Trigger the tapout callback.
-    def trigger_callback(callback, *args)
-      send("tapout_#{callback}", *args)
-    end
+=end
 
     # Stub out the three IO methods used by the built-in reporter.
     def puts(*args); end
@@ -129,16 +222,11 @@ module MiniTest
   private
 
     #    
-    def filtered_tests(suite, type)
+    def filtered_tests(test_case) #suite, type
       filter = options[:filter] || '/./'
       filter = Regexp.new($1) if filter =~ /\/(.*)\//
-      suite.send("#{type}_methods").grep(filter)
+      test_case.runnable_methods.grep(filter)
     end
-
-    #
-    #def suites_of_type(type)
-    #  TestCase.send("#{type}_suites")
-    #end
 
 =begin
     #
@@ -156,20 +244,24 @@ module MiniTest
     end
 =end
 
-    def count_tests!(suites, type)
+    def count_tests!(test_cases)
       filter = options[:filter] || '/./'
       filter = Regexp.new $1 if filter =~ /\/(.*)\//
 
-      @test_count = suites.inject(0) do |acc, suite|
-        acc + suite.send("#{type}_methods").grep(filter).length
+      @test_count = test_cases.inject(0) do |acc, test_case|
+        acc + test_case.runnable_methods.grep(filter).length
       end
     end
 
     #
-    def tapout_before_suites(suites, type)
+    # Tapout Records
+    #
+
+    #
+    def tapout_before_suite()
       doc = {
         'type'  => 'suite',
-        'start' => self.suites_start_time.strftime('%Y-%m-%d %H:%M:%S'),
+        'start' => self.suite_start_time.strftime('%Y-%m-%d %H:%M:%S'),
         'count' => self.test_count,
         'seed'  => self.options[:seed],
         'rev'   => REVISION
@@ -178,10 +270,10 @@ module MiniTest
     end
 
     #
-    def tapout_after_suites(suites, type)
+    def tapout_after_suite()
       doc = {
         'type' => 'final',
-        'time' => Time.now - self.suites_start_time,
+        'time' => Time.now - self.suite_start_time,
         'counts' => {
           'total' => self.test_count,
           'pass'  => self.test_count - self.failures - self.errors - self.skips,
@@ -195,36 +287,36 @@ module MiniTest
     end
 
     #
-    def tapout_before_suite(suite)
+    def tapout_before_case(test_case)
       doc = {
         'type'    => 'case',
         'subtype' => '',
-        'label'   => "#{suite}",
+        'label'   => "#{test_case}",
         'level'   => 0
       }
       return doc
     end
 
     #
-    def tapout_after_suite(suite)
+    def tapout_after_case(test_case)
     end
 
     #
-    def tapout_before_test(suite, test)
+    def tapout_before_test(result)
     end
 
     #
-    def tapout_after_test(suite, test)
+    def tapout_after_test(result)
     end
 
     #
-    def tapout_pass(suite, test, test_runner)
+    def tapout_test_pass(result) #suite, test, test_runner
       doc = {
         'type'        => 'test',
         'subtype'     => '',
         'status'      => 'pass',
         #'setup': foo instance
-        'label'       => "#{test}",
+        'label'       => "#{result.name}",
         #'expected' => 2
         #'returned' => 2
         #'file' => 'test/test_foo.rb'
@@ -238,7 +330,7 @@ module MiniTest
         #  file: lib/foo.rb
         #  line: 11..13
         #  code: Foo#*
-        'time' => Time.now - self.suite_start_time
+        'time' => Time.now - self.test_start_time
       }
 
       stdout, stderr = @_stdout, @_stderr
@@ -249,16 +341,16 @@ module MiniTest
     end
 
     #
-    def tapout_skip(suite, test, test_runner)
-      e = test_runner.exception
-      e_file, e_line = location(test_runner.exception)
+    def tapout_test_skip(result) #suite, test, test_runner
+      e = result.exception
+      e_file, e_line = location(result.exception)
       r_file = e_file.sub(Dir.pwd+'/', '')
 
       doc = {
         'type'        => 'test',
         'subtype'     => '',
         'status'      => 'skip',
-        'label'       => "#{test}",
+        'label'       => "#{result.name}",
         #'setup' => "foo instance",
         #'expected' => 2,
         #'returned' => 1,
@@ -282,22 +374,22 @@ module MiniTest
           'snippet'   => code_snippet(e_file, e_line),
           'backtrace' => filter_backtrace(e.backtrace)
         },
-        'time' => Time.now - self.suite_start_time
+        'time' => Time.now - self.suite_start_time  # result.time
       }
       return doc
     end
 
     #
-    def tapout_failure(suite, test, test_runner)
-      e = test_runner.exception
-      e_file, e_line = location(test_runner.exception)
+    def tapout_test_failure(result)
+      e = result.exception
+      e_file, e_line = location(result.exception)
       r_file = e_file.sub(Dir.pwd+'/', '')
 
       doc = {
         'type'        => 'test',
         'subtype'     => '',
         'status'      => 'fail',
-        'label'       => "#{test}",
+        'label'       => "#{result.name}",
         #'setup' => "foo instance",
         #'expected' => 2,
         #'returned' => 1,
@@ -321,7 +413,7 @@ module MiniTest
           'snippet'   => code_snippet(e_file, e_line),
           'backtrace' => filter_backtrace(e.backtrace)
         },
-        'time' => Time.now - self.suite_start_time
+        'time' => Time.now - self.suite_start_time   # result.time
       }
 
       stdout, stderr = @_stdout, @_stderr
@@ -332,16 +424,16 @@ module MiniTest
     end
 
     #
-    def tapout_error(suite, test, test_runner)
-      e = test_runner.exception
-      e_file, e_line = location(test_runner.exception)
+    def tapout_test_error(result)
+      e = result.exception
+      e_file, e_line = location(e)
       r_file = e_file.sub(Dir.pwd+'/', '')
 
       doc = {
         'type'        => 'test',
         'subtype'     => '',
         'status'      => 'error',
-        'label'       => "#{test}",
+        'label'       => "#{result.name}",
         #'setup' => "foo instance",
         #'expected' => 2,
         #'returned' => 1,
@@ -357,15 +449,15 @@ module MiniTest
         #  'line' => 11..13
         #  'code' => Foo#*
         'exception' => {
-          'message'   => clean_message(e.message),
-          'class'     => e.class.name,
+          'message'   => clean_message(e.error.message),
+          'class'     => e.error.class.name,
           'file'      => r_file,
           'line'      => e_line,
           'source'    => source(e_file)[e_line-1].strip,
           'snippet'   => code_snippet(e_file, e_line),
           'backtrace' => filter_backtrace(e.backtrace)
         },
-        'time' => Time.now - self.suite_start_time
+        'time' => Time.now - self.suite_start_time  # result.time
       }
 
       stdout, stderr = @_stdout, @_stderr
@@ -374,6 +466,8 @@ module MiniTest
 
       return doc
     end
+
+    # ---------------------------------------------------------------------
 
     #
     #def filter_backtrace(backtrace)
@@ -393,7 +487,7 @@ module MiniTest
         i ? bt[0...i] :  bt
       end
       ## now apply MiniTest's own filter (note: doesn't work if done first, why?)
-      trace = MiniTest::filter_backtrace(trace)
+      trace = Minitest::filter_backtrace(trace)
       ## if the backtrace is empty now then revert to the original
       trace = backtrace if trace.empty?
       ## simplify paths to be relative to current workding diectory
@@ -472,16 +566,59 @@ module MiniTest
 
   end
 
-  ##
-  # Used to keep a record of each test and it's result.
   #
-  class TestRecord < Struct.new(:suite, :test, :assertions, :time, :exception)
-    def result
+  # TestResult delegtes to Minitest's own test result object.
+  #
+  class TestResult
+    # Create new TestResult instance.
+    #
+    # result - MiniTest's test result object.
+    #
+    def initialize(result)
+      @result = result
+    end
+
+    def test_case
+      @result.class
+    end
+    alias testcase test_case
+
+    # Name of the test.
+    def test
+      @result.name
+    end
+    alias name test
+
+    # Number of assertions made by test.
+    #
+    # Returns [Integer].
+    def assertions
+      @result.assertions
+    end
+
+    #
+    def time
+      @result.time
+    end
+
+    #
+    def exception
+      @result.failure
+    end
+
+    # Result type.
+    def type
       case exception
-      when nil then :pass
-      when Skip then :skip
-      when Assertion then :failure
-      else :error
+      when UnexpectedError
+        :err
+      when Skip
+        :skip
+      when Assertion
+        :fail
+      when nil 
+        :pass
+      else 
+        :err
       end
     end
   end
@@ -587,32 +724,32 @@ module MiniTest
   ##
   # TAP-Y adapater.
   #
-  class TapY < MiniTap
-    def initialize
+  class TapY < Minitap
+    def initialize(io=$stdout, options={})
       require 'yaml' unless respond_to?(:to_yaml)
-      super
+      super(io, options)
     end
 
-    def tapout_before_suites(suites, type)
-      wp super(suites, type).to_yaml
+    def tapout_before_suite()
+      wp super().to_yaml
     end
-    def tapout_before_suite(suite)
-      wp super(suite).to_yaml
+    def tapout_before_case(test_case)
+      wp super(test_case).to_yaml
     end
-    def tapout_pass(suite, test, test_runner)
-      wp super(suite, test, test_runner).to_yaml
+    def tapout_test_pass(result)
+      wp super(result).to_yaml
     end
-    def tapout_skip(suite, test, test_runner)
-      wp super(suite, test, test_runner).to_yaml
+    def tapout_test_skip(result)
+      wp super(result).to_yaml
     end
-    def tapout_failure(suite, test, test_runner)
-      wp super(suite, test, test_runner).to_yaml
+    def tapout_test_failure(result)
+      wp super(result).to_yaml
     end
-    def tapout_error(suite, test, test_runner)
-      wp super(suite, test, test_runner).to_yaml
+    def tapout_test_error(result)
+      wp super(result).to_yaml
     end
-    def tapout_after_suites(suites, type)
-      wp super(suites, type).to_yaml
+    def tapout_after_suite()
+      wp super().to_yaml
       wp "..."
     end
 
@@ -624,32 +761,32 @@ module MiniTest
   ##
   # TAP-J adapater.
   #
-  class TapJ < MiniTap
-    def initialize
+  class TapJ < Minitap
+    def initialize(io=$stdout, options={})
       require 'json' unless respond_to?(:to_json)
-      super
+      super(io, options)
     end
 
-    def tapout_before_suites(suites, type)
-      wp super(suites, type).to_json
+    def tapout_before_suite()
+      wp super().to_json
     end
-    def tapout_before_suite(suite)
-      wp super(suite).to_json
+    def tapout_before_case(test_case)
+      wp super(test_case).to_json
     end
-    def tapout_pass(suite, test, test_runner)
-      wp super(suite, test, test_runner).to_json
+    def tapout_test_pass(result)
+      wp super(result).to_json
     end
-    def tapout_skip(suite, test, test_runner)
-      wp super(suite, test, test_runner).to_json
+    def tapout_test_skip(result)
+      wp super(result).to_json
     end
-    def tapout_failure(suite, test, test_runner)
-      wp super(suite, test, test_runner).to_json
+    def tapout_test_failure(result)
+      wp super(result).to_json
     end
-    def tapout_error(suite, test, test_runner)
-      wp super(suite, test, test_runner).to_json
+    def tapout_test_error(result)
+      wp super(result).to_json
     end
-    def tapout_after_suites(suites, type)
-      wp super(suites, type).to_json
+    def tapout_after_suite()
+      wp super().to_json
     end
 
     def wp(str)

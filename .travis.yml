@@ -1,9 +1,10 @@
 ---
 language: ruby
-script: "bundle exec qed"
+script: "bundle exec qed demo/minitest5"
 rvm:
   - 1.8.7
   - 1.9.3
+  - 2.0.0
   - rbx
   - rbx-19mode
   - jruby

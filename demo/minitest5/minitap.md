@@ -1,8 +1,8 @@
-# MiniTap 
+# Minitap 
 
-Given a MiniTest testcase:
+Given a Minitest testcase:
 
-    class ExampleTestCase < MiniTest::Unit::TestCase
+    class ExampleTestCase < Minitest::Test
       def test_error
         raise
       end
@@ -52,7 +52,7 @@ The passing test should have the following charactersitics.
 The failing test should
 
     failing_test['label']               #=> "test_failing"
-    failing_test['exception']['class']  #=> "MiniTest::Assertion"
+    failing_test['exception']['class']  #=> "Minitest::Assertion"
     failing_test['exception']['file']   #=> "test.rb"
     failing_test['exception']['line']   #=> 13
     failing_test['exception']['source'] #=> "assert_equal('1', '2')"
