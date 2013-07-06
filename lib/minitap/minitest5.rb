@@ -598,8 +598,14 @@ module Minitest
       end
     end
 
+    # Is this a Minitest::Spec?
+    #
+    # Returns [Boolean].
     def spec?
-      @is_spec ||= @result.class.methods.include?(:it)
+      @is_spec ||= (
+        Minitest.const_defined?(:Spec) && @result.class < Minitest::Spec
+        #@result.class.methods.include?(:it) || @result.class.methods.include?('it')
+      )
     end
 
     # Number of assertions made by test.
