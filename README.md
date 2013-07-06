@@ -24,13 +24,14 @@ TAP-Y/J formats.
 
 ### Minitest 5+
 
-MiniTest 5+ has new reporter system and plug-in API. Minitap takes advantage
+MiniTest 5 has a new report system and plug-in API. Minitap takes advantage
 of this new API to allow the TAP-Y or TAP-J formats to be selected via command-line
 options instead of requiring that the format be set in the test helper scripts.
-Instead, simply add `--tapy` or `--tapj` after a isolated `-` separator on the
+
+To use simply add `--tapy` or `--tapj` after an isolated `-` separator on the
 ruby test command invocation, e.g.
 
-    $ ruby -Ilib test.runner.rb - --tapy
+    $ ruby -Ilib test/runner.rb - --tapy
 
 In your test helper scripts be sure you have the standard Minitest line:
 
