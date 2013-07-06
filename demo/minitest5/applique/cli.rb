@@ -1,6 +1,6 @@
 require 'tapout'
 
-When 'Given a Minitest testcase' do |text|
+When 'Given a Minitest (((Test|Spec)))' do |type, text|
   @test = text
 end
 

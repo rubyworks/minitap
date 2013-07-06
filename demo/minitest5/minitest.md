@@ -1,6 +1,6 @@
 # Minitap 
 
-Given a Minitest testcase:
+Given a Minitest Test:
 
     class ExampleTestCase < Minitest::Test
       def test_error
@@ -54,7 +54,7 @@ The failing test should
     failing_test['label']               #=> "test_failing"
     failing_test['exception']['class']  #=> "Minitest::Assertion"
     failing_test['exception']['file']   #=> "test.rb"
-    failing_test['exception']['line']   #=> 13
+    failing_test['exception']['line']   #=> 14
     failing_test['exception']['source'] #=> "assert_equal('1', '2')"
 
 The failing test should also not have any mention of minitap in the
@@ -69,7 +69,7 @@ The erring test should
     erring_test['label']               #=> 'test_error'
     erring_test['exception']['class']  #=> 'RuntimeError'
     erring_test['exception']['file']   #=> 'test.rb'
-    erring_test['exception']['line']   #=> 9
+    erring_test['exception']['line']   #=> 10
     erring_test['exception']['source'] #=> 'raise'
 
 The erring test should also not have any mention of minitap in the

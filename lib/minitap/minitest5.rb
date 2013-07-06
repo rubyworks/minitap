@@ -316,7 +316,7 @@ module Minitest
         'subtype'     => '',
         'status'      => 'pass',
         #'setup': foo instance
-        'label'       => "#{result.name}",
+        'label'       => "#{result.label}",
         #'expected' => 2
         #'returned' => 2
         #'file' => 'test/test_foo.rb'
@@ -350,7 +350,7 @@ module Minitest
         'type'        => 'test',
         'subtype'     => '',
         'status'      => 'skip',
-        'label'       => "#{result.name}",
+        'label'       => "#{result.label}",
         #'setup' => "foo instance",
         #'expected' => 2,
         #'returned' => 1,
@@ -389,7 +389,7 @@ module Minitest
         'type'        => 'test',
         'subtype'     => '',
         'status'      => 'fail',
-        'label'       => "#{result.name}",
+        'label'       => "#{result.label}",
         #'setup' => "foo instance",
         #'expected' => 2,
         #'returned' => 1,
@@ -405,7 +405,7 @@ module Minitest
         #  'line' => 11..13
         #  'code' => Foo#*
         'exception' => {
-          'message'   => clean_message(e.message),
+          'message'   => clean_message(e.message),  
           'class'     => e.class.name,
           'file'      => r_file,
           'line'      => e_line,
@@ -433,7 +433,7 @@ module Minitest
         'type'        => 'test',
         'subtype'     => '',
         'status'      => 'error',
-        'label'       => "#{result.name}",
+        'label'       => "#{result.label}",
         #'setup' => "foo instance",
         #'expected' => 2,
         #'returned' => 1,
@@ -581,13 +581,26 @@ module Minitest
     def test_case
       @result.class
     end
-    alias testcase test_case
+    alias :testcase :test_case
 
     # Name of the test.
-    def test
+    def name
       @result.name
     end
-    alias name test
+    alias :test :name
+
+    #
+    def label
+      if spec?
+        name.sub(/^test_\d+_/, '').gsub('_', ' ')
+      else
+        name
+      end
+    end
+
+    def spec?
+      @is_spec ||= @result.class.methods.include?(:it)
+    end
 
     # Number of assertions made by test.
     #
