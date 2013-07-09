@@ -39,8 +39,8 @@ module Minitest
     def initialize(io = $stdout, options = {})
       super(io, options)
 
-      @_stdout = ''
-      @_stderr = ''
+      #@_stdout = StringIO.new
+      #@_stderr = StringIO.new
 
       #@test_results = {}
       #self.assertion_count = 0
@@ -55,6 +55,12 @@ module Minitest
       super
 
       @test_cases = Runnable.runnables
+
+      capture_io
+
+      #@_stdout, @_stderr = capture_io do
+      #  super_result = super(suite, type)
+      #end
 
       before_suite(@test_cases)
     end
@@ -82,7 +88,7 @@ module Minitest
         before_case(result.test_case)
       end
 
-      before_test(result)
+      #before_test(result)
       case result.type
       when :skip
         test_skip(result)
@@ -107,6 +113,8 @@ module Minitest
     #
     def report
       super
+
+      uncapture_io
 
       after_suite()
     end
@@ -215,9 +223,19 @@ module Minitest
 =end
 
     # Stub out the three IO methods used by the built-in reporter.
-    def puts(*args); end
-    def print(*args); end
-    def status(io = output); end
+    def p(*args)
+      args.each{ |a| io.print(a.inspect); puts }
+    end
+
+    def puts(*args)
+      io.puts(*args)
+    end
+
+    def print(*args)
+      io.print(*args)
+    end
+
+    #def status(io = output); end
 
   private
 
@@ -294,6 +312,9 @@ module Minitest
         'label'   => "#{test_case}",
         'level'   => 0
       }
+
+      record_stdcom(doc)
+
       return doc
     end
 
@@ -309,7 +330,9 @@ module Minitest
     def tapout_after_test(result)
     end
 
+    # TAP record for pass.
     #
+    # Returns [Hash].
     def tapout_test_pass(result) #suite, test, test_runner
       doc = {
         'type'        => 'test',
@@ -330,17 +353,21 @@ module Minitest
         #  file: lib/foo.rb
         #  line: 11..13
         #  code: Foo#*
-        'time' => Time.now - self.test_start_time
+        'time' => Time.now - self.suite_start_time
       }
 
-      stdout, stderr = @_stdout, @_stderr
-      doc['stdout'] = stdout unless stdout.empty?
-      doc['stderr'] = stderr unless stderr.empty?
+      record_stdcom(doc)
+
+      #stdout, stderr = @_stdout, @_stderr
+      #doc['stdout'] = stdout unless stdout.empty?
+      #doc['stderr'] = stderr unless stderr.empty?
 
       return doc
     end
 
+    # TAP record for skip.
     #
+    # Returns [Hash].
     def tapout_test_skip(result) #suite, test, test_runner
       e = result.exception
       e_file, e_line = location(result.exception)
@@ -374,12 +401,14 @@ module Minitest
           'snippet'   => code_snippet(e_file, e_line),
           'backtrace' => filter_backtrace(e.backtrace)
         },
-        'time' => Time.now - self.suite_start_time  # result.time
+        'time' => Time.now - self.suite_start_time
       }
       return doc
     end
 
+    # TAP record for failure.
     #
+    # Returns [Hash].
     def tapout_test_failure(result)
       e = result.exception
       e_file, e_line = location(result.exception)
@@ -416,14 +445,18 @@ module Minitest
         'time' => Time.now - self.suite_start_time   # result.time
       }
 
-      stdout, stderr = @_stdout, @_stderr
-      doc['stdout'] = stdout unless stdout.empty?
-      doc['stderr'] = stderr unless stderr.empty?
+      record_stdcom(doc)
+
+      #stdout, stderr = @_stdout, @_stderr
+      #doc['stdout'] = stdout unless stdout.empty?
+      #doc['stderr'] = stderr unless stderr.empty?
 
       return doc
     end
 
+    # TAP record for error.
     #
+    # Returns [Hash].
     def tapout_test_error(result)
       e = result.exception
       e_file, e_line = location(e)
@@ -460,14 +493,32 @@ module Minitest
         'time' => Time.now - self.suite_start_time  # result.time
       }
 
-      stdout, stderr = @_stdout, @_stderr
-      doc['stdout'] = stdout unless stdout.empty?
-      doc['stderr'] = stderr unless stderr.empty?
+      record_stdcom(doc)
+
+      #stdout, stderr = @_stdout, @_stderr
+      #doc['stdout'] = stdout unless stdout.empty?
+      #doc['stderr'] = stderr unless stderr.empty?
 
       return doc
     end
 
     # ---------------------------------------------------------------------
+
+    #
+    #
+    #
+    def record_stdcom(doc)
+      begin
+        doc['stdout'] = $stdout.string unless $stdout.length == 0 #empty?
+        doc['stderr'] = $stderr.string unless $stderr.length == 0 #empty?
+        $stdout.close; $stderr.close
+        $stdout, $stderr = StringIO.new, StringIO.new
+      #end
+      rescue => err
+        uncapture_io
+        raise err
+      end
+    end
 
     #
     #def filter_backtrace(backtrace)
@@ -551,17 +602,28 @@ module Minitest
     end
 
     #
+    #def capture_io
+    #  ostdout, ostderr = $stdout, $stderr
+    #  cstdout, cstderr = StringIO.new, StringIO.new
+    #  $stdout, $stderr = cstdout, cstderr
+    #
+    #  yield
+    #
+    #  return cstdout.string.chomp("\n"), cstderr.string.chomp("\n")
+    #ensure
+    #  $stdout = ostdout
+    #  $stderr = ostderr
+    #end
+
+    #
     def capture_io
-      ostdout, ostderr = $stdout, $stderr
-      cstdout, cstderr = StringIO.new, StringIO.new
-      $stdout, $stderr = cstdout, cstderr
+      @_stdout, @_stderr = $stdout, $stderr
+      $stdout, $stderr = StringIO.new, StringIO.new
+    end
 
-      yield
-
-      return cstdout.string.chomp("\n"), cstderr.string.chomp("\n")
-    ensure
-      $stdout = ostdout
-      $stderr = ostderr
+    #
+    def uncapture_io
+      $stdout, $stderr = @_stdout, @_stderr
     end
 
   end
@@ -705,6 +767,7 @@ module Minitest
   end
 =end
 
+=begin
   ##
   # Around advice.
   #
@@ -739,6 +802,7 @@ module Minitest
   class Unit::TestCase
     include AroundTestHooks
   end
+=end
 
   ##
   # TAP-Y adapater.
@@ -773,7 +837,7 @@ module Minitest
     end
 
     def wp(str)
-      STDOUT.puts(str)
+      io.puts(str)
     end
   end
 
@@ -809,7 +873,8 @@ module Minitest
     end
 
     def wp(str)
-      STDOUT.puts(str)
+      io.puts(str)
+      #STDOUT.puts(str)
     end
   end
 
