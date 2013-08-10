@@ -1,5 +1,16 @@
 # RELEASE HISTORY
 
+## 0.5.0 | 2013-08-10
+
+The release adds support for MiniTest 5. Minitest completely 
+cahnged they way custom reporters are handled so this release
+includes extensive new code.
+
+Changes:
+
+* Add support for Minitest 5.
+
+
 ## 0.4.1 | 2013-03-18
 
 Minor release improves upon backtrace filtering and makes
@@ -9,7 +20,7 @@ are used even though minitap has been requried.
 Changes:
 
 * Use $RUBY_IGNORE_CALLERS for backtrace filtering.
-* Endure hook methods exist before using them.
+* Ensure hook methods exist before using them.
  
 
 ## 0.4.0 | 2013-03-17

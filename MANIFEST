@@ -2,11 +2,13 @@
 .index
 .yardopts
 lib/minitap/ignore_callers.rb
+lib/minitap/minitest5.rb
 lib/minitap/tapj.rb
 lib/minitap/tapy.rb
 lib/minitap.rb
-HISTORY.md
+lib/minitest/minitap_plugin.rb
+NOTICE.md
 README.md
 QED.md
-NOTICE.md
+HISTORY.md
 LICENSE.txt
