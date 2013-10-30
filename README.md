@@ -35,7 +35,7 @@ ruby test command invocation, e.g.
 
 In your test helper scripts be sure you have the standard Minitest line:
 
-    require 'minitap/autorun'
+    require 'minitest/autorun'
 
 And remove any old `MiniTest::Unit.runner=` assignments if you are migrating 
 from v4.
