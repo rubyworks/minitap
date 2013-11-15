@@ -1,5 +1,16 @@
 # RELEASE HISTORY
 
+## 0.5.1 | 2013-11-16
+
+This release simply removes all the remaing v4 code that
+is no longer needed to work with Minitest 5. This also
+fixes an issue Minitap has with working with Rails 4.
+
+Changes:
+
+* Remove all vestigial v4 code.
+
+
 ## 0.5.0 | 2013-11-15
 
 The release adds support for MiniTest 5. Minitest completely 
