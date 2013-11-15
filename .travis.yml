@@ -12,4 +12,7 @@ rvm:
 env:
   - "minitest=4"
   - "minitest=5"
+gemfile: 
+  - "demo/Gemfile"
+
 
