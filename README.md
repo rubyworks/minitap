@@ -1,4 +1,4 @@
-# MiniTap
+# Minitap
 
 [Website](http://rubyworks.github.com/minitap) |
 [Documentation](http://rubydoc.info/gems/minitap/frames) |
@@ -24,7 +24,7 @@ TAP-Y/J formats.
 
 ### Minitest 5+
 
-MiniTest 5 has a new report system and plug-in API. Minitap takes advantage
+Minitest 5 has a new report system and plug-in API. Minitap takes advantage
 of this new API to allow the TAP-Y or TAP-J formats to be selected via command-line
 options instead of requiring that the format be set in the test helper scripts.
 
@@ -54,8 +54,14 @@ And that's all there is too it.
 
 ### MiniTest 4
 
-If you are still using MiniTest v4 or less, custom report formats are set by 
-assigning `MiniTest::Unit.runner` to an instance of a custom runner class. 
+If you are still using MiniTest 4.x you will need to use Minitap version 4.x
+as well. In your dependencies be sure to specify this version. For example in 
+your Gemfile:
+
+    gem "minitap", "~> 4.0"
+
+For Minitest 4 and and older, custom report formats are set by assigning
+the `MiniTest::Unit.runner` to an instance of a custom runner class. 
 In our case we want to set it to an instance of `MiniTest::TapY` or `MiniTest::TapJ`.
 So in your project's test helper script add, e.g.
 
