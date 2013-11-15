@@ -1,0 +1,13 @@
+source "https://rubygems.org"
+
+if ENV['minitest'] == '4'
+  gem "minitest", "~> 4.0"
+else
+  gem "minitest", "~> 5.0"
+end
+
+group "test" do
+  gem "tapout", ">= 0.3.0"
+  gem "qed"
+  gem "ae"
+end

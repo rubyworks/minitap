@@ -1,6 +1,6 @@
 ---
 language: ruby
-script: "bundle exec qed demo/minitest5"
+script: "bundle exec qed demo"
 rvm:
   - 1.8.7
   - 1.9.3
@@ -9,4 +9,7 @@ rvm:
   - rbx-19mode
   - jruby
   - jruby-19mode
+env:
+  - "minitest=4"
+  - "minitest=5"
 
