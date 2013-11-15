@@ -9,10 +9,4 @@ rvm:
   - rbx-19mode
   - jruby
   - jruby-19mode
-env:
-  - "minitest=4"
-  - "minitest=5"
-gemfile: 
-  - "demo/Gemfile"
-
 

@@ -8,13 +8,10 @@ authors:
   email: transfire@gmail.com
 organizations: []
 requirements:
-- version: ! '>= 0.3.0'
+- version: 0.3.0+
   name: tapout
-- name: minitest
-- groups:
-  - build
-  development: true
-  name: ergo
+- version: 5.0~
+  name: minitest
 - groups:
   - test
   development: true
@@ -23,6 +20,10 @@ requirements:
   - test
   development: true
   name: ae
+- groups:
+  - build
+  development: true
+  name: ergo
 conflicts: []
 alternatives: []
 resources:
@@ -54,10 +55,10 @@ customs: []
 paths:
   lib:
   - lib
-summary: TAP-Y/J reporters for MiniTest
-title: MiniTap
-version: 0.4.1
 name: minitap
+title: MiniTap
+summary: TAP-Y/J reporters for MiniTest
 description: MiniTap provides a MiniTest TAP-Y/J report format suitable for use with
   TAPOUT.
-date: '2013-03-17'
+version: 0.5.0
+date: '2013-11-15'

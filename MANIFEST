@@ -9,6 +9,6 @@ lib/minitap.rb
 lib/minitest/minitap_plugin.rb
 NOTICE.md
 README.md
-QED.md
 HISTORY.md
+DEMO.md
 LICENSE.txt

@@ -1,6 +1,6 @@
 *.gem
 *.lock
-QED.md
+DEMO.md
 .ergo/digest
 .yardoc
 doc/

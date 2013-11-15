@@ -1,7 +1,6 @@
 ---
-- tapout >= 0.3.0
-- minitest
-- ergo    (build)
-- qed     (test)
-- ae      (test)
-
+- tapout 0.3.0+
+- minitest 5.0~
+- qed  (test)
+- ae   (test)
+- ergo (build)

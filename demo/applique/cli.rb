@@ -27,7 +27,7 @@ end
 #end
 
 def test_command(type)
-  return test_command_4 if ENV['minitest'] == "4"
+  #return test_command_4 if ENV['minitest'] == "4"
 
   if type == 'TAP-Y'
     `ruby -I../../lib test.rb - --tapy`
@@ -38,11 +38,12 @@ end
 
 # TODO: Is there a way to offer option to select the format via code?
 def test_helper(type)
-  return test_helper_4(type) if ENV['minitest'] == "4"
+  #return test_helper_4(type) if ENV['minitest'] == "4"
 
   "require 'minitest/autorun'"
 end
 
+=begin
 def test_command_4
   `ruby -I../../lib test.rb`
 end
@@ -63,4 +64,4 @@ def test_helper_4(type)
     }
   end
 end
-
+=end
