@@ -1,14 +1,17 @@
 # RELEASE HISTORY
 
-## 0.5.0 | 2013-08-10
+## 0.5.0 | 2013-11-15
 
 The release adds support for MiniTest 5. Minitest completely 
-cahnged they way custom reporters are handled so this release
-includes extensive new code.
+changes the way custom reporters are handled so this release
+includes extensive new code. Note that this version is also
+no longer intended for use with Minitest 4 or older. If you
+are using Minitest 4, please use Minitap 4.x as well.
 
 Changes:
 
 * Add support for Minitest 5.
+* Deprecate support for Minitest 4.
 
 
 ## 0.4.1 | 2013-03-18
