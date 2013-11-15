@@ -56,7 +56,7 @@ The failing test should
     failing_test['label']               #=> "should fail"
     failing_test['exception']['class']  #=> "Minitest::Assertion"
     failing_test['exception']['file']   #=> "test.rb"
-    failing_test['exception']['line']   #=> 16
+    failing_test['exception']['line']   #=> 12
     failing_test['exception']['source'] #=> "assert_equal('1', '2')"
 
 The failing test should also not have any mention of minitap in the
@@ -71,7 +71,7 @@ The erring test should
     erring_test['label']               #=> 'should error'
     erring_test['exception']['class']  #=> 'RuntimeError'
     erring_test['exception']['file']   #=> 'test.rb'
-    erring_test['exception']['line']   #=> 12
+    erring_test['exception']['line']   #=> 8
     erring_test['exception']['source'] #=> 'raise'
 
 The erring test should also not have any mention of minitap in the
