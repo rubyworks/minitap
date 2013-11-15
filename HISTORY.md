@@ -6,7 +6,7 @@ The release adds support for MiniTest 5. Minitest completely
 changes the way custom reporters are handled so this release
 includes extensive new code. Note that this version is also
 no longer intended for use with Minitest 4 or older. If you
-are using Minitest 4, please use Minitap 4.x as well.
+are using Minitest 4, please use Minitap 0.4.x as well.
 
 Changes:
 

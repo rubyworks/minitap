@@ -58,7 +58,7 @@ If you are still using MiniTest 4.x you will need to use Minitap version 4.x
 as well. In your dependencies be sure to specify this version. For example in 
 your Gemfile:
 
-    gem "minitap", "~> 4.0"
+    gem "minitap", "~> 0.4.0"
 
 For Minitest 4 and and older, custom report formats are set by assigning
 the `MiniTest::Unit.runner` to an instance of a custom runner class. 
