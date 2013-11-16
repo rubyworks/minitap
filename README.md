@@ -10,7 +10,7 @@
 [![Flattr Me](http://api.flattr.com/button/flattr-badge-large.png)](http://flattr.com/thing/324911/Rubyworks-Ruby-Development-Fund)
 
 
-## About
+# About
 
 The MiniTap project provides a TAP-Y and TAP-J output reporters for
 the MiniTest test framework --the test framework that comes standard
@@ -20,15 +20,15 @@ See [TAPOUT](http://rubyworks.github.com/tapout) for more information about
 TAP-Y/J formats.
 
 
-## Usage
+# Usage
 
-### Minitest 5
+## Minitest 5
 
 Minitest 5 has a new report system and plug-in API. Minitap takes advantage
 of this new API to allow the TAP-Y or TAP-J formats to be selected via command-line
 options as an alternative to setting the format in test helper scripts.
 
-# Via Command Line
+### Via Command Line
 
 To use simply add `--tapy` or `--tapj` after an isolated `-` separator on the
 ruby test command invocation, e.g.
@@ -51,7 +51,7 @@ Then pipe the output to the `tapout` command, e.g.
 
     $ ruby test/some_test.rb - --tapy | tapout progressbar
 
-# Via Helper Script
+### Via Helper Script
 
 To use via test helper script, require the `minitap` library after `minitest/autorun`
 and assign `Minitest.reporter` to the Minitap reporter to be used.
@@ -72,7 +72,7 @@ Or using Rake:
 You may need the `-q` option for Rake to supress extraneous output.
 
 
-### MiniTest 4
+## MiniTest 4
 
 If you are still using MiniTest 4.x you will need to use Minitap version 4.x
 as well. In your dependencies be sure to specify this version. For example in 
@@ -113,7 +113,7 @@ Then pipe the output to the `tapout` command, e.g.
     $ rpt=tapy ruby test/some_test.rb | tapout progressbar
 
 
-## Copying
+# Copying
 
 Copyright (c) 2011 Rubyworks
 
