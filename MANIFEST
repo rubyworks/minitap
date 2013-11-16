@@ -1,6 +1,7 @@
 #!mast .index .ruby .yardopts bin lib man spec test *.md *.txt
 .index
 .yardopts
+lib/minitap/autorun.rb
 lib/minitap/ignore_callers.rb
 lib/minitap/minitest5.rb
 lib/minitap.rb

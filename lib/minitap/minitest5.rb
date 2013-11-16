@@ -36,7 +36,9 @@ module Minitest
     attr_accessor :test_start_time
 
     # Initialize new Minitap Minitest reporter.
-    def initialize(io = $stdout, options = {})
+    def initialize(options = {})
+      io = options.delete(:io) || $stdout
+
       super(io, options)
 
       #@_stdout = StringIO.new
@@ -808,9 +810,9 @@ module Minitest
   # TAP-Y adapater.
   #
   class TapY < Minitap
-    def initialize(io=$stdout, options={})
+    def initialize(options={})
       require 'yaml' unless respond_to?(:to_yaml)
-      super(io, options)
+      super(options)
     end
 
     def tapout_before_suite()
@@ -845,9 +847,9 @@ module Minitest
   # TAP-J adapater.
   #
   class TapJ < Minitap
-    def initialize(io=$stdout, options={})
+    def initialize(options={})
       require 'json' unless respond_to?(:to_json)
-      super(io, options)
+      super(options)
     end
 
     def tapout_before_suite()

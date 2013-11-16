@@ -12,6 +12,8 @@ requirements:
   name: tapout
 - version: 5.0~
   name: minitest
+- version: 0.0.2+
+  name: minitest-reporter-api
 - groups:
   - test
   development: true
@@ -60,5 +62,5 @@ title: MiniTap
 summary: TAP-Y/J reporters for MiniTest
 description: MiniTap provides a MiniTest TAP-Y/J report format suitable for use with
   TAPOUT.
-version: 0.5.1
+version: 0.5.2
 date: '2013-11-16'

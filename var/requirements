@@ -1,6 +1,8 @@
 ---
 - tapout 0.3.0+
 - minitest 5.0~
+- minitest-reporter-api 0.0.2+
 - qed  (test)
 - ae   (test)
 - ergo (build)
+
