@@ -22,11 +22,13 @@ TAP-Y/J formats.
 
 ## Usage
 
-### Minitest 5+
+### Minitest 5
 
 Minitest 5 has a new report system and plug-in API. Minitap takes advantage
 of this new API to allow the TAP-Y or TAP-J formats to be selected via command-line
 options as an alternative to setting the format in test helper scripts.
+
+# Via Command Line
 
 To use simply add `--tapy` or `--tapj` after an isolated `-` separator on the
 ruby test command invocation, e.g.
@@ -49,7 +51,10 @@ Then pipe the output to the `tapout` command, e.g.
 
     $ ruby test/some_test.rb - --tapy | tapout progressbar
 
-To use via test helper script, require the 'minitap' library after `minitest/autorun`.
+# Via Helper Script
+
+To use via test helper script, require the `minitap` library after `minitest/autorun`
+and assign `Minitest.reporter` to the Minitap reporter to be used.
 
     require "minitest/autorun"
     require "minitap"
@@ -62,7 +67,9 @@ Then pipe the output to the `tapout` command, e.g.
 
 Or using Rake:
 
-    $ rake -q test | tapout progressbar
+    $ rake test | tapout progressbar
+
+You may need the `-q` option for Rake to supress extraneous output.
 
 
 ### MiniTest 4
