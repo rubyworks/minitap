@@ -10,16 +10,26 @@ module Minitest
   end
 
   def self.plugin_minitap_init(options)
-    if options[:minitap]
-      require 'minitap/minitest5'
-
+    if defined?(Minitest::MinitapReporter) && Minitest::MinitapReporter.reporter
+      reporter = Minitest::MinitapReporter.reporter
       self.reporter.reporters.clear
 
-      case options[:minitap] || ENV['rpt']
-      when 'tapj'
-        self.reporter << TapJ.new(options[:io], options)
-      when 'tapy'
-        self.reporter << TapY.new(options[:io], options)
+      reporter.io = options[:io]
+      reporter.options = options
+
+      self.reporter << reporter
+    else
+      if options[:minitap]
+        require 'minitap/minitest5'
+
+        self.reporter.reporters.clear
+
+        case options[:minitap] || ENV['rpt']
+        when 'tapj'
+          self.reporter << TapJ.new(options[:io], options)
+        when 'tapy'
+          self.reporter << TapY.new(options[:io], options)
+        end
       end
     end
   end
