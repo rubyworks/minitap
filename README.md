@@ -51,6 +51,14 @@ Then pipe the output to the `tapout` command, e.g.
 
 And that's all there is too it.
 
+There is another way to use, in your test helper scripts
+
+    $ require "minitest/minitap_reporter"
+    $ Minitest::MinitapReporter.use 
+    
+Then pipe the output to the `tapout` command, e.g.
+
+    $ rake test | tapout progressbar
 
 ### MiniTest 4
 
