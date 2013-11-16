@@ -1,4 +1,4 @@
-gem "minitest", "~> 5.0"
+#gem "minitest", "~> 5.0"
 
 require 'minitest'
 require 'minitest/reporter_api'
