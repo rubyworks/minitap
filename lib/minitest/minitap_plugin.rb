@@ -1,5 +1,6 @@
 module Minitest
 
+  #
   def self.plugin_minitap_options(opts, options)
     opts.on "--tapy", "Use TapY reporter." do
       options[:minitap] = 'tapy'
@@ -9,6 +10,7 @@ module Minitest
       options[:minitap] = 'tapj'
     end
 
+    # DEPRECATED Thanks to minitest-reporter-api gem.
     #unless options[:minitap]
     #  if defined?(Minitest::TapY) && self.reporter == Minitest::TapY
     #    options[:minitap] = 'tapy'
@@ -18,29 +20,20 @@ module Minitest
     #end
   end
 
+  #
   def self.plugin_minitap_init(options)
-    #if defined?(Minitest::MinitapReporter) && Minitest::MinitapReporter.reporter
-    #  reporter = Minitest::MinitapReporter.reporter
-    #  self.reporter.reporters.clear
-    #
-    #  reporter.io = options[:io]
-    #  reporter.options = options
-    #
-    #  self.reporter << reporter
-    #else
-      if options[:minitap]
-        require 'minitap/minitest5'
+    if options[:minitap]
+      require 'minitap/minitest5'
 
-        self.reporter.reporters.clear
+      self.reporter.reporters.clear
 
-        case options[:minitap] || ENV['rpt']
-        when 'tapj'
-          self.reporter << TapJ.new(options)
-        when 'tapy'
-          self.reporter << TapY.new(options)
-        end
+      case options[:minitap] || ENV['rpt']
+      when 'tapj'
+        self.reporter << TapJ.new(options)
+      when 'tapy'
+        self.reporter << TapY.new(options)
       end
-    #end
+    end
   end
 
 end
