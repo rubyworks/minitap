@@ -1,5 +1,17 @@
 # RELEASE HISTORY
 
+## 0.5.2 | 2013-11-18
+
+This release makes it possible to specify reporters in code
+(again), and not just on the command line. This makes it easier
+to use with other test and build tools such as Rake.
+
+Changes:
+
+* Add support for in code configuration of reporter.
+* Use minitest-reporter-api gem to support in code reporter config.
+
+
 ## 0.5.1 | 2013-11-16
 
 This release simply removes all the remaing v4 code that
