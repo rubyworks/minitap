@@ -41,6 +41,9 @@ module Minitest
 
       super(io, options)
 
+      # since tapout uses a unix pipe, we don't want any buffering
+      io.sync = true
+
       #@_stdout = StringIO.new
       #@_stderr = StringIO.new
 
@@ -876,7 +879,6 @@ module Minitest
 
     def wp(str)
       io.puts(str)
-      #STDOUT.puts(str)
     end
   end
 
