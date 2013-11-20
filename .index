@@ -62,5 +62,5 @@ title: MiniTap
 summary: TAP-Y/J reporters for MiniTest
 description: MiniTap provides a MiniTest TAP-Y/J report format suitable for use with
   TAPOUT.
-version: 0.5.2
-date: '2013-11-18'
+version: 0.5.3
+date: '2013-11-20'
