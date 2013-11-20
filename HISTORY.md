@@ -1,5 +1,16 @@
 # RELEASE HISTORY
 
+## 0.5.3 | 2013-11-20
+
+Small change made to ensure that output i/o is un sync mode.
+This prevents test results fro being buffered over the pipe
+
+Changes:
+
+* Add `io.sync = true` *after* Minitest reporter class is initialized.
+* Add notes to README about use tapout's pause and resume feature.
+
+
 ## 0.5.2 | 2013-11-18
 
 This release makes it possible to specify reporters in code
