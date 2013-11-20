@@ -113,6 +113,33 @@ Then pipe the output to the `tapout` command, e.g.
     $ rpt=tapy ruby test/some_test.rb | tapout progressbar
 
 
+# Using Pry & Other Tools
+
+Becuase Tapout communicates with Minitest via a shell pipe it is improtant
+to keep in mind that any non TAP-Y/J output that tapout receives might 
+force it to halt. To ensure this doesn't occur a *pause code* (`16.chr`) can
+be sent over the pipe to instruct the tapout comamnd to stop processing test
+results and route `$stdin` directly to `$stdout` instead. A *resume code*
+(`23.chr`) can be sent to restart test result processing.
+
+A good example of this is when using `binding.pry` for debugging. To do so
+while using tapout:
+
+    require 'tapout/utility'
+    tapout.pause{ binding.pry }
+
+Or, even more convenient, specifically for use with pry:
+
+    require 'tapout/utility'
+    tapout.pry(binding)
+
+Which is a more covenient way of coding:
+
+    STDOUT.puts 16.chr
+    binding.pry
+    STDOUT.puts 23.chr
+
+
 # Copying
 
 Copyright (c) 2011 Rubyworks
