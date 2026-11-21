@@ -1,3 +1,21 @@
+> **This project is retired.**
+>
+> Minitap made Minitest write TAP-Y or TAP-J for
+> [Tapout](https://github.com/rubyworks/tapout). It was written for
+> Minitest 5.0 and can't be installed with Minitest 6. With later
+> Minitest 5 releases it still runs, but labels every test case
+> `Minitest::Result` and reports a failure's location inside Minitest.
+>
+> Tapout itself is maintained. It reads plain TAP as well as TAP-Y and
+> TAP-J, and [Rubytest](https://github.com/rubyworks/rubytest) writes
+> both of the latter.
+>
+> This repository preserves Minitap, last released as 0.5.3 in 2013. It
+> is no longer maintained. The gem remains on RubyGems, as does its
+> companion minitest-reporter-api.
+
+---
+
 # Minitap
 
 [Website](http://rubyworks.github.com/minitap) |
