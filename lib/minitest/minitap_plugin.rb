@@ -1,40 +1,20 @@
+# Minitest finds this file by its name. Minitest 5 loads it on its own
+# when the gem is installed; `Minitest.load :minitap` loads it too.
+#
+# Requiring `minitap` registers the plugin as a module where Minitest
+# supports that (5.24 and newer). The methods below are for older
+# versions, which only know plugins by name.
+
+require 'minitap'
+
 module Minitest
 
-  #
   def self.plugin_minitap_options(opts, options)
-    opts.on "--tapy", "Use TapY reporter." do
-      options[:minitap] = 'tapy'
-    end
-
-    opts.on "--tapj", "Use TapJ reporter." do
-      options[:minitap] = 'tapj'
-    end
-
-    # DEPRECATED Thanks to minitest-reporter-api gem.
-    #unless options[:minitap]
-    #  if defined?(Minitest::TapY) && self.reporter == Minitest::TapY
-    #    options[:minitap] = 'tapy'
-    #  elsif defined?(Minitest::TapJ) && self.reporter == Minitest::TapJ
-    #    options[:minitap] = 'tapj'
-    #  end
-    #end
+    Minitap.minitest_plugin_options(opts, options) unless Minitap.registered?
   end
 
-  #
   def self.plugin_minitap_init(options)
-    if options[:minitap]
-      require 'minitap/minitest5'
-
-      self.reporter.reporters.clear
-
-      case options[:minitap] || ENV['rpt']
-      when 'tapj'
-        self.reporter << TapJ.new(options)
-      when 'tapy'
-        self.reporter << TapY.new(options)
-      end
-    end
+    Minitap.minitest_plugin_init(options) unless Minitap.registered?
   end
 
 end
-

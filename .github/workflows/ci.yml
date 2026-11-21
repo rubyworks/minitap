@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  # Monthly, to catch breakage from new Ruby or Minitest releases
+  # when nothing has been pushed.
+  schedule:
+    - cron: '0 6 1 * *'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Ruby ${{ matrix.ruby }}, Minitest ${{ matrix.minitest || 'latest' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { ruby: '2.7' }
+          - { ruby: '3.0' }
+          - { ruby: '3.1' }
+          - { ruby: '3.2' }
+          - { ruby: '3.3' }
+          - { ruby: '3.4' }
+          - { ruby: '4.0' }
+          # Minitest 6 needs Ruby 3.2, so the rows above use Minitest 5
+          # up to Ruby 3.1 and Minitest 6 after. These cover the rest.
+          - { ruby: '2.7', minitest: '5.11.3' }
+          - { ruby: '3.4', minitest: '~> 5.0' }
+          - { ruby: '4.0', minitest: '~> 5.0' }
+    env:
+      MINITEST_VERSION: ${{ matrix.minitest }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Demos
+        run: bundle exec qed -Ilib demo/

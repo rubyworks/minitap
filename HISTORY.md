@@ -1,5 +1,46 @@
 # RELEASE HISTORY
 
+## Unreleased
+
+Minitap works with current Minitest again, including Minitest 6, and is
+now a plain Minitest plugin. It needs Minitest 5.11 or newer and Ruby
+2.7 or newer.
+
+Changes:
+
+* Work with Minitest 6. The dependency was `~> 5.0`, so Minitap couldn't
+  be installed alongside it.
+* Use Minitest's plugin system only. Minitap registers itself as a plugin
+  when it is required, and no longer depends on `minitest-reporter-api`,
+  which replaced `Minitest.run` with a copy from 2013.
+* Choose the format in code with `Minitap.tapy!`, `Minitap.tapj!` or
+  `Minitap.format = :tapy`. `Minitest.reporter = Minitap::TapY` no longer
+  does anything.
+* `require 'minitap/autorun'` works again. It printed nothing and exited
+  with an error.
+* Label a case with the name of its test class. With Minitest 5.11 and
+  newer every case was labelled `Minitest::Result`.
+* Give the location of a failure in the test file. On Ruby 3.4 and newer
+  it was given as a line in Minitest's own `assertions.rb`.
+* Report a skipped test with the status `omit`, which is what TAP-Y/J
+  specifies. It was `skip`, which Tapout took for something else.
+* Report an error with the class and message of the error that was
+  raised, not of Minitest's wrapper around it.
+* The count at the start of the stream follows Minitest's `--exclude`
+  option as well as `--name`, and the final total is the number of tests
+  that ran.
+* Tests run in the order the seed gives them without Minitap. Counting
+  the tests used to disturb it.
+* A record has no `subtype` when there is nothing to say, where it had
+  an empty one.
+* The reporters are `Minitap::TapY` and `Minitap::TapJ`, subclasses of
+  `Minitap::Reporter`. `Minitest::TapY`, `Minitest::TapJ` and
+  `Minitest::Minitap` are gone, as is the `$RUBY_IGNORE_CALLERS` global.
+* Require Tapout 0.5 or newer.
+* Replace the old packaging (`.index`, `.gemspec`, `Assembly`, `MANIFEST`,
+  `var/`) with a plain `minitap.gemspec`, and Travis with GitHub Actions,
+  testing Ruby 2.7 to 4.0 with Minitest 5 and 6.
+
 ## 0.5.3 | 2013-11-20
 
 Small change made to ensure that output i/o is un sync mode.
