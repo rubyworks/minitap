@@ -1,6 +1,6 @@
 # RELEASE HISTORY
 
-## Unreleased
+## 0.6.0 | 2026-11-21
 
 Minitap works with current Minitest again, including Minitest 6, and is
 now a plain Minitest plugin. It needs Minitest 5.11 or newer and Ruby
