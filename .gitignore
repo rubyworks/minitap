@@ -1,13 +1,7 @@
 *.gem
 *.lock
-DEMO.md
-.ergo/digest
 .yardoc
 doc/
 log/
-man/**/*.1
-man/**/*.html
 pkg/
 tmp/
-web/
-work/sandbox
